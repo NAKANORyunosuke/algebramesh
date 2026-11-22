@@ -1,0 +1,24 @@
+AlgebraMesh worker image with Risa/Asir (agent-asir)
+
+AlgebraMesh (/usr/local/bin/algebramesh) is distributed under the MIT License
+(LICENSE in this directory). The Rust crates it contains are listed with their
+licenses in THIRD-PARTY-LICENSES.txt.
+
+This image is based on the Risa/Asir image ghcr.io/nakanoryunosuke/risa-asir-container
+(OpenXM, Risa/Asir 20260331). That software is not covered by the MIT License:
+
+- Risa/Asir (/OpenXM_contrib2/asir2018, /OpenXM/bin/ox_asir) is distributed under
+  the Risa/Asir LIMITED USE LICENSE AGREEMENT of FUJITSU LABORATORIES LIMITED
+  (/OpenXM_contrib2/asir2018/LICENSE, /OpenXM/Copyright/Copyright.asir).
+  It may be used, copied, modified and redistributed solely for non-commercial
+  and non-profit purposes. Results obtained with Risa/Asir that are published
+  or presented must refer to Risa/Asir and its copyright owner.
+- OpenXM (/OpenXM) is distributed under the BSD 2-Clause License except where a
+  subdirectory states another license (/OpenXM/LICENSE, /OpenXM_contrib2/LICENSE).
+- PARI/GP (/OpenXM/lib/libpari*, used by /OpenXM/bin/ox_pari) is distributed
+  under the GNU General Public License, version 2 or later. Its source code is
+  in /OpenXM/src/pari.
+- GMP, MPFR and MPC (/OpenXM/lib) are distributed under the GNU Lesser General
+  Public License, version 3 or later.
+
+See docs/licenses.md in the AlgebraMesh repository for the details.

@@ -1,0 +1,33 @@
+{
+  "name": "matrix_solve_qq_unique",
+  "note": "det -8: the solution (-1/2, 1/2) is unique",
+  "kind": "matrix",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "operation": "matrix.solve",
+  "arguments": {
+    "domain": "QQ",
+    "matrix": [
+      [
+        "2",
+        "4"
+      ],
+      [
+        "6",
+        "8"
+      ]
+    ],
+    "rhs": [
+      "1",
+      "1"
+    ]
+  },
+  "expect": {
+    "solution": [
+      "-1/2",
+      "1/2"
+    ]
+  }
+}

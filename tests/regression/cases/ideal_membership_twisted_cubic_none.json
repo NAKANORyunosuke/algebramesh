@@ -1,0 +1,131 @@
+{
+  "name": "ideal_membership_twisted_cubic_none",
+  "note": "certificate none: f = xw - yz + z^2 = (xw - yz) + (z^2 - yw) + yw has the normal form yw, so f is not in I; membership.not_in asserted, no other claim",
+  "kind": "ideal_membership",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z",
+          "w"
+        ],
+        "order": "grevlex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                2,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                1,
+                1,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                0,
+                1,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                0,
+                2,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "polynomial": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "1",
+          "exponents": [
+            1,
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "coefficient": "-1",
+          "exponents": [
+            0,
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "coefficient": "1",
+          "exponents": [
+            0,
+            0,
+            2,
+            0
+          ]
+        }
+      ]
+    },
+    "certificate": "none"
+  },
+  "expect": {
+    "member": false
+  }
+}

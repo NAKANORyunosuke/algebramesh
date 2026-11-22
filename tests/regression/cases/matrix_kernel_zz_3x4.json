@@ -1,0 +1,36 @@
+{
+  "name": "matrix_kernel_zz_3x4",
+  "note": "a lattice of rank 2; its basis is not unique",
+  "kind": "matrix",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "operation": "matrix.kernel",
+  "arguments": {
+    "domain": "ZZ",
+    "matrix": [
+      [
+        "2",
+        "4",
+        "6",
+        "8"
+      ],
+      [
+        "1",
+        "3",
+        "5",
+        "7"
+      ],
+      [
+        "3",
+        "7",
+        "11",
+        "15"
+      ]
+    ]
+  },
+  "expect": {
+    "basis_vectors": 2
+  }
+}

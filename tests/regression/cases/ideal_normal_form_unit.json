@@ -1,0 +1,102 @@
+{
+  "name": "ideal_normal_form_unit",
+  "note": "xy - 1 and x generate the unit ideal: G = [1], and every f, here x^2 y + 3y - 1, has the normal form 0",
+  "kind": "ideal_normal_form",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y"
+        ],
+        "order": "grevlex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "polynomial": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "1",
+          "exponents": [
+            2,
+            1
+          ]
+        },
+        {
+          "coefficient": "3",
+          "exponents": [
+            0,
+            1
+          ]
+        },
+        {
+          "coefficient": "-1",
+          "exponents": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "certificate": "representation"
+  },
+  "expect": {
+    "remainder": {
+      "type": "polynomial",
+      "terms": []
+    },
+    "basis": [
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

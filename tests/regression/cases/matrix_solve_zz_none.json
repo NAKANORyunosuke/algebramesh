@@ -1,0 +1,30 @@
+{
+  "name": "matrix_solve_zz_none",
+  "note": "2x + 4y = 1 has no integer solution (2 does not divide 1)",
+  "kind": "matrix",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "operation": "matrix.solve",
+  "arguments": {
+    "domain": "ZZ",
+    "matrix": [
+      [
+        "2",
+        "4"
+      ],
+      [
+        "6",
+        "8"
+      ]
+    ],
+    "rhs": [
+      "1",
+      "1"
+    ]
+  },
+  "expect": {
+    "solution": null
+  }
+}

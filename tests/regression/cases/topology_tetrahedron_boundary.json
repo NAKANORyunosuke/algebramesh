@@ -1,0 +1,59 @@
+{
+  "name": "topology_tetrahedron_boundary",
+  "note": "the boundary of the tetrahedron, a sphere: H_2 = ZZ",
+  "kind": "topology",
+  "backends": [
+    "macaulay2"
+  ],
+  "operation": "simplicial.homology",
+  "arguments": {
+    "complex": {
+      "type": "simplicial_complex",
+      "facets": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          1,
+          3
+        ],
+        [
+          0,
+          2,
+          3
+        ],
+        [
+          1,
+          2,
+          3
+        ]
+      ]
+    },
+    "domain": "ZZ"
+  },
+  "expect": {
+    "face_counts": [
+      4,
+      6,
+      4
+    ],
+    "homology": [
+      {
+        "rank": 1,
+        "torsion": []
+      },
+      {
+        "rank": 0,
+        "torsion": []
+      },
+      {
+        "rank": 1,
+        "torsion": []
+      }
+    ],
+    "euler_characteristic": 2
+  }
+}

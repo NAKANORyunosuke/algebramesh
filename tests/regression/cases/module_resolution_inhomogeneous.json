@@ -1,0 +1,99 @@
+{
+  "name": "module_resolution_inhomogeneous",
+  "note": "xy - 1 and zw - x are not homogeneous: no degrees, no Betti numbers, and no claim of minimality",
+  "kind": "module",
+  "operation": "complex.free_resolution",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z",
+          "w"
+        ],
+        "order": "grevlex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                1,
+                0,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                0,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                0,
+                0,
+                1,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                1,
+                0,
+                0,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "certificate": "include"
+  },
+  "expect": {
+    "degrees": null,
+    "betti": null,
+    "claims": {
+      "res.complex": [
+        "checked",
+        "checked"
+      ],
+      "res.image": [
+        "checked",
+        "checked"
+      ],
+      "res.exact": [
+        "asserted",
+        "asserted"
+      ]
+    },
+    "not_claimed": [
+      "res.input_homogeneous",
+      "res.differentials_homogeneous",
+      "res.entries_in_maximal_ideal",
+      "res.minimal",
+      "res.betti"
+    ]
+  }
+}

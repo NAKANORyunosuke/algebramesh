@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "backend": "macaulay2",
+  "operation": "polynomial.factor",
+  "arguments": {
+    "ring": {
+      "domain": "QQ",
+      "variables": [
+        "x",
+        "y"
+      ],
+      "order": "grevlex"
+    },
+    "expression": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "1",
+          "exponents": [
+            4,
+            0
+          ]
+        },
+        {
+          "coefficient": "-1",
+          "exponents": [
+            0,
+            4
+          ]
+        }
+      ]
+    }
+  },
+  "limits": {
+    "wall_seconds": 120,
+    "memory_mb": 1024
+  },
+  "retry_policy": "never"
+}

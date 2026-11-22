@@ -1,0 +1,34 @@
+# cargo-deny: licenses, duplicate crates and sources of the Rust dependencies
+# (docs/licenses.md). Run with `cargo deny check licenses bans sources`.
+
+[graph]
+all-features = true
+
+[licenses]
+# Every dependency must be usable under one of these. The list holds only
+# permissive licenses, so that the binaries can be distributed under the MIT
+# terms of AlgebraMesh plus the notices of the dependencies (docs/adr/0009).
+allow = [
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-3-Clause",
+    "ISC",
+    "MIT",
+    "Unicode-3.0",
+    "Unlicense",
+    "Zlib",
+]
+confidence-threshold = 0.9
+
+[licenses.private]
+# The workspace crates are MIT (LICENSE) and not published.
+ignore = true
+
+[bans]
+multiple-versions = "allow"
+wildcards = "deny"
+allow-wildcard-paths = true
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"

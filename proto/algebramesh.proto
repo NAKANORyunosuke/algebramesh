@@ -1,0 +1,451 @@
+// Scheduler API (design §4, §7). Clients use `Scheduler`; worker agents use
+// `AgentGateway`; the schedulers of a Raft cluster use `Replication` (ADR 0013). All run over
+// TLS with a bearer token in the `authorization` metadata. Job specifications and records are carried as JSON whose schema is
+// defined by `algebramesh-core` (JobSpec, JobRecord, CasResult, CasError), so the
+// logical model has one definition. Field numbers must never be reused.
+syntax = "proto3";
+
+package algebramesh.v1;
+
+// ---------------------------------------------------------------------------
+// Client API
+// ---------------------------------------------------------------------------
+
+message SubmitRequest {
+  // JSON of algebramesh_core::JobSpec.
+  string spec_json = 1;
+  // Larger runs first among queued jobs with a matching worker.
+  int32 priority = 2;
+  // Idempotency key chosen by the client (e.g. a UUID), the same for every
+  // retry of one submission. A submission whose key is already known returns
+  // the job it created instead of a new one; the same key with a different job
+  // specification or priority is refused with ALREADY_EXISTS. Empty: every call
+  // creates a job. Keys are kept as long as the job.
+  string request_id = 3;
+}
+
+message JobRef {
+  string job_id = 1;
+  // The caller resolves blob markers itself (ADR 0021). Without it, `Result`
+  // returns the record with every marker replaced by its value, up to 96 MiB
+  // in all, and FAILED_PRECONDITION beyond.
+  bool accept_blob_refs = 2;
+}
+
+message JobStatus {
+  string job_id = 1;
+  // One of QUEUED, ASSIGNED, RUNNING, SUCCEEDED, FAILED, TIMED_OUT, CANCELLING,
+  // CANCELLED, LOST.
+  string state = 2;
+  string backend = 3;
+  string operation = 4;
+  uint32 attempt = 5;
+  string agent_id = 6;
+  // JSON of algebramesh_core::CasError when the job ended with an error.
+  string error_json = 7;
+  // Set when a LOST job was resubmitted under its retry policy.
+  string retried_as = 8;
+  bool cancel_requested = 9;
+}
+
+message JobResult {
+  JobStatus status = 1;
+  // JSON of algebramesh_core::JobRecord; empty until the job is terminal.
+  string record_json = 2;
+}
+
+message Empty {}
+
+message BackendSummary {
+  string name = 1;
+  // JSON of algebramesh_core::Capabilities, combined over the online workers
+  // of the backend: the operations and types of any of them; the limits every
+  // one of them enforces (`enforced_limits`), which hold wherever a job runs;
+  // the smallest `max_precision`, if every one reports one; the signature of
+  // each operation the workers declare alike (`signatures`), and the
+  // operations they declare differently (`signature_conflicts`, ADR 0022).
+  string capabilities_json = 2;
+  repeated string agent_ids = 3;
+  // The limits at least one of the workers enforces. A job asking for one of
+  // them is accepted only if a worker that offers its operation enforces it,
+  // and runs only on such workers (ADR 0014, ADR 0022).
+  repeated string available_limits = 4;
+}
+
+message ListBackendsResponse {
+  repeated BackendSummary backends = 1;
+  // Jobs waiting in QUEUED, and the number beyond which a submission of a new
+  // job is refused with RESOURCE_EXHAUSTED.
+  uint64 queued_jobs = 2;
+  uint64 max_queued_jobs = 3;
+  // Features the schedulers of the cluster have agreed on (ADR 0020).
+  repeated string server_features = 4;
+}
+
+message WorkerSummary {
+  string agent_id = 1;
+  string name = 2;
+  string host = 3;
+  bool online = 4;
+  int64 last_heartbeat_unix_ms = 5;
+  repeated BackendOffer backends = 6;
+  repeated string running_job_ids = 7;
+}
+
+message ListWorkersResponse {
+  repeated WorkerSummary workers = 1;
+}
+
+message RequestRef {
+  string request_id = 1;
+}
+
+message ListJobsRequest {
+  // Only the jobs created by a submission whose request_id starts with this.
+  // Jobs come in the order of their request_id when it is set, and in the
+  // order of submission otherwise.
+  string request_id_prefix = 1;
+  // Only the jobs in this state (QUEUED, ..., LOST), of this backend, of this
+  // operation. Empty: any.
+  string state = 2;
+  string backend = 3;
+  string operation = 4;
+  // next_page_token of the previous page; empty for the first page.
+  string page_token = 5;
+  // At most this many jobs; 0 means 100. At most 1000.
+  uint32 page_size = 6;
+}
+
+// A job as ListJobs lists it: the columns the scheduler keeps beside the
+// record, read without the record. Status gives the attempt and the error.
+message JobSummary {
+  string job_id = 1;
+  // Empty for a job submitted without one.
+  string request_id = 2;
+  string state = 3;
+  string backend = 4;
+  string operation = 5;
+  string agent_id = 6;
+  string retried_as = 7;
+  bool cancel_requested = 8;
+}
+
+message ListJobsResponse {
+  repeated JobSummary jobs = 1;
+  // Empty once the listing is complete. Otherwise more jobs may match: pass
+  // it as page_token. A page can hold fewer than page_size jobs, none even,
+  // when the scheduler stopped looking after a bounded number of jobs.
+  string next_page_token = 2;
+}
+
+// ---------------------------------------------------------------------------
+// Blobs: values kept outside the Raft log, named by the SHA-256 of their
+// bytes (ADR 0021). Ids are "sha256:<64 lowercase hex digits>".
+// ---------------------------------------------------------------------------
+
+// A piece of a blob being stored. The first message names the blob and its
+// size; the pieces follow in order (CHUNK_BYTES each, the last shorter).
+message BlobUpload {
+  string id = 1;
+  uint64 size = 2;
+  bytes data = 3;
+}
+
+message BlobRef {
+  string id = 1;
+  uint64 size = 2;
+}
+
+message BlobRequest {
+  string id = 1;
+  // Bytes to skip, to resume a transfer that broke off.
+  uint64 offset = 2;
+}
+
+message BlobChunk {
+  bytes data = 1;
+}
+
+message BlobStat {
+  // The answering scheduler holds the blob.
+  bool present = 1;
+  // A majority of the voters holds it (answered by the leader only).
+  bool durable = 2;
+  uint64 size = 3;
+}
+
+message BlobList {
+  repeated string ids = 1;
+}
+
+service Scheduler {
+  rpc Submit(SubmitRequest) returns (JobStatus);
+  rpc Status(JobRef) returns (JobStatus);
+  rpc Result(JobRef) returns (JobResult);
+  rpc Cancel(JobRef) returns (JobStatus);
+  rpc ListBackends(Empty) returns (ListBackendsResponse);
+  rpc ListWorkers(Empty) returns (ListWorkersResponse);
+  // The job that a submission with this request_id created, as the committed
+  // state records it. Creates nothing; NOT_FOUND when there is no such job.
+  rpc LookupRequest(RequestRef) returns (JobStatus);
+  // The jobs that pass the filters, a page at a time, from the committed
+  // state. Creates nothing.
+  rpc ListJobs(ListJobsRequest) returns (ListJobsResponse);
+  // On the leader, once the cluster has the feature blob_refs: stores a blob
+  // and returns once a majority of the voters has it on disk.
+  // FAILED_PRECONDITION without the feature.
+  rpc PutBlob(stream BlobUpload) returns (BlobRef);
+  // The bytes of a blob from `offset`. A follower answers only from its own
+  // disk, UNAVAILABLE otherwise; the leader fetches from the others, and says
+  // NOT_FOUND for a blob nobody refers to, DATA_LOSS when every member has
+  // answered and none holds it.
+  rpc GetBlob(BlobRequest) returns (stream BlobChunk);
+  rpc StatBlob(BlobRequest) returns (BlobStat);
+}
+
+// ---------------------------------------------------------------------------
+// Agent API
+// ---------------------------------------------------------------------------
+
+message BackendOffer {
+  string name = 1;
+  // JSON of algebramesh_core::Capabilities.
+  string capabilities_json = 2;
+  // Version reported by the CAS, when the agent could determine it.
+  string backend_version = 3;
+  // Image digest or source commit of the CAS installation.
+  string build = 4;
+  // Concurrent jobs; for OpenXM backends one slot is one session.
+  uint32 slots = 5;
+  // SHA-256 (hex) of the driver files the backend loads; empty without driver
+  // files (ADR 0020, feature backend_provenance).
+  string driver_sha256 = 6;
+  // Commit the agent was built from, with "-modified" if the working tree was
+  // changed or that is not known; empty if not known.
+  string agent_build = 7;
+  // Version of the AlgebraMesh driver of the backend.
+  string driver_version = 8;
+}
+
+message RegisterRequest {
+  string name = 1;
+  string host = 2;
+  string agent_version = 3;
+  repeated BackendOffer backends = 4;
+  // Features the agent can use (ADR 0020).
+  repeated string features = 5;
+}
+
+message RegisterResponse {
+  string agent_id = 1;
+  uint32 heartbeat_interval_ms = 2;
+  // Epoch of the scheduler (the Raft term in a cluster); it grows with every
+  // change of leader. An agent never goes back to a scheduler with a lower epoch
+  // than it has seen.
+  uint64 epoch = 3;
+  // Features the schedulers have agreed on; the agent uses no other (ADR 0020).
+  repeated string features = 4;
+}
+
+message HeartbeatRequest {
+  string agent_id = 1;
+  repeated string running_job_ids = 2;
+}
+
+message HeartbeatResponse {
+  // Jobs the agent must cancel.
+  repeated string cancel_job_ids = 1;
+  // False if the scheduler does not know this agent (e.g. after a restart);
+  // the agent must register again.
+  bool known = 2;
+  uint64 epoch = 3;
+  // Features the schedulers have agreed on, as in RegisterResponse; the agent
+  // learns of a feature enabled after it registered (ADR 0020).
+  repeated string features = 4;
+}
+
+message PollRequest {
+  string agent_id = 1;
+  // Backends with a free slot in the polling task.
+  repeated string backends = 2;
+  // Long-poll duration; the server caps it.
+  uint32 wait_ms = 3;
+}
+
+message Assignment {
+  string job_id = 1;
+  uint32 attempt = 2;
+  string spec_json = 3;
+}
+
+message PollResponse {
+  // Absent if nothing was assigned before the wait expired.
+  optional Assignment assignment = 1;
+}
+
+message JobEvent {
+  string agent_id = 1;
+  string job_id = 2;
+  uint32 attempt = 3;
+}
+
+message JobFinished {
+  string agent_id = 1;
+  string job_id = 2;
+  uint32 attempt = 3;
+  // JSON of Result<CasResult, CasError> as {"Ok": ...} or {"Err": ...}.
+  string outcome_json = 4;
+}
+
+// GetRecord: the committed record of a job (W2, ADR 0032).
+message RecordRequest {
+  string job_id = 1;
+}
+
+message Ack {
+  // False if the report was ignored (e.g. the job had already been declared
+  // LOST); the reason is given for the agent's log.
+  bool accepted = 1;
+  string reason = 2;
+}
+
+service AgentGateway {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+  rpc PollAssignment(PollRequest) returns (PollResponse);
+  rpc ReportStarted(JobEvent) returns (Ack);
+  // A result that refers to blobs is refused with FAILED_PRECONDITION when
+  // no scheduler holds one of them (store it again), and with UNAVAILABLE
+  // while one is not yet on a majority (ask StatBlob again later).
+  rpc ReportFinished(JobFinished) returns (Ack);
+  // As in Scheduler (ADR 0021).
+  rpc PutBlob(stream BlobUpload) returns (BlobRef);
+  rpc GetBlob(BlobRequest) returns (stream BlobChunk);
+  rpc StatBlob(BlobRequest) returns (BlobStat);
+  // The status of a job and, once it is terminal, its record with its markers
+  // as they are, from the committed state; an agent resolves the references
+  // {"$ref": ...} of a job's arguments with it (W2, ADR 0032). Creates and
+  // changes nothing. NOT_FOUND for an unknown job; FAILED_PRECONDITION until
+  // the cluster has the feature workflow_refs.
+  rpc GetRecord(RecordRequest) returns (JobResult);
+}
+
+// ---------------------------------------------------------------------------
+// Raft between the schedulers of a cluster (ADR 0013)
+// ---------------------------------------------------------------------------
+
+message NodeStatus {
+  // Name of the scheduler in the cluster configuration.
+  string node_id = 1;
+  // "leader", "follower", "candidate", "learner", or "single" without a cluster.
+  string role = 2;
+  // Raft term.
+  uint64 epoch = 3;
+  // Sequence number of the last change applied to the metadata store.
+  int64 last_seq = 4;
+  // Name of the current leader, if known.
+  string leader = 5;
+  // The leader answers client and agent calls (it has heard from a majority).
+  bool serving = 6;
+  // Version of the scheduler binary.
+  string version = 7;
+  // Features this scheduler can use, and those the cluster has agreed on
+  // (ADR 0020). A scheduler older than the agreement reports neither.
+  repeated string features = 8;
+  repeated string enabled_features = 9;
+  // The blob store (ADR 0021), as of the last repair: on the leader, the
+  // blobs records refer to that fewer than a majority of the voters hold;
+  // on every scheduler, those it lacks itself (for a learner, how far it is
+  // from holding them all), and the bodies in quarantine and the free bytes
+  // of its volume.
+  uint64 blobs_under_replicated = 10;
+  uint64 blobs_missing = 11;
+  uint64 blobs_quarantined = 12;
+  uint64 blob_free_bytes = 13;
+  // The bodies this scheduler holds and their bytes, and the uploads it
+  // refused since it started because a client token had used up its
+  // allowance (`blob_upload_bytes_per_token_per_hour`).
+  uint64 blobs_stored = 14;
+  uint64 blob_bytes_stored = 15;
+  uint64 blob_uploads_refused = 16;
+}
+
+// An openraft request or response, as JSON (the types of openraft 0.9 with the
+// `serde` feature). Responses carry `Result<_, RaftError>`.
+message RaftMessage {
+  bytes json = 1;
+}
+
+message RaftSnapshot {
+  // JSON of the leader's vote and of the snapshot metadata.
+  bytes vote_json = 1;
+  bytes meta_json = 2;
+  // The SQLite database of the snapshot, when it is carried here.
+  bytes database = 3;
+  // Otherwise the transfer whose chunks (SnapshotChunk) carried it, with its
+  // size and SHA-256 (hex).
+  string transfer_id = 4;
+  uint64 size = 5;
+  string sha256 = 6;
+}
+
+// A piece of a snapshot, sent in order before its RaftSnapshot.
+message SnapshotChunk {
+  string transfer_id = 1;
+  uint64 offset = 2;
+  bytes data = 3;
+}
+
+message ClusterMember {
+  uint64 id = 1;
+  string name = 2;
+  string url = 3;
+  // A voter counts towards the majority; a learner only receives the log.
+  bool voter = 4;
+}
+
+message ClusterMembers {
+  repeated ClusterMember members = 1;
+  // Name of the current leader, if known.
+  string leader = 2;
+  uint64 epoch = 3;
+}
+
+message AddMemberRequest {
+  uint64 id = 1;
+  string name = 2;
+  string url = 3;
+  // Name in the member's server certificate; defaults to the host of `url`.
+  string server_name = 4;
+}
+
+message RemoveMemberRequest {
+  uint64 id = 1;
+}
+
+service Replication {
+  rpc Status(Empty) returns (NodeStatus);
+  // Starts an election on this scheduler now, for an operator
+  // (`algebramesh server promote`).
+  rpc Promote(Empty) returns (NodeStatus);
+  // The members of the cluster, as this scheduler knows them.
+  rpc Members(Empty) returns (ClusterMembers);
+  // On the leader: adds a scheduler, first as a learner until it has caught up
+  // with the log, then as a voter.
+  rpc AddMember(AddMemberRequest) returns (ClusterMembers);
+  // On the leader: removes a scheduler from the cluster.
+  rpc RemoveMember(RemoveMemberRequest) returns (ClusterMembers);
+  rpc AppendEntries(RaftMessage) returns (RaftMessage);
+  rpc Vote(RaftMessage) returns (RaftMessage);
+  rpc SendSnapshotChunk(SnapshotChunk) returns (Empty);
+  rpc InstallSnapshot(RaftSnapshot) returns (RaftMessage);
+  // Stores a blob the leader sends; answers once it is on disk (ADR 0021).
+  rpc PushBlob(stream BlobUpload) returns (BlobRef);
+  // A blob from this scheduler's own disk only; NOT_FOUND if it has none.
+  rpc FetchBlob(BlobRequest) returns (stream BlobChunk);
+  // The given blobs this scheduler holds.
+  rpc HasBlobs(BlobList) returns (BlobList);
+  // On the leader: the given blobs that a job record refers to, committed or
+  // not yet committed. Used before an unreferenced blob is removed.
+  rpc BlobsRegistered(BlobList) returns (BlobList);
+}

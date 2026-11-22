@@ -1,0 +1,35 @@
+{
+  "name": "matrix_hnf_2_4_6_8",
+  "note": "the rows span (2, 0) and (0, 4)",
+  "kind": "matrix",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "operation": "matrix.hermite_normal_form",
+  "arguments": {
+    "domain": "ZZ",
+    "matrix": [
+      [
+        "2",
+        "4"
+      ],
+      [
+        "6",
+        "8"
+      ]
+    ]
+  },
+  "expect": {
+    "form": [
+      [
+        "2",
+        "0"
+      ],
+      [
+        "0",
+        "4"
+      ]
+    ]
+  }
+}

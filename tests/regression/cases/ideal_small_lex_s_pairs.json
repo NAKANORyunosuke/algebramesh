@@ -1,0 +1,156 @@
+{
+  "name": "ideal_small_lex_s_pairs",
+  "note": "certificate s_pairs: the same basis; lm = z^7, y, x are pairwise coprime, so there are no pairs and H is 3 x 0; gb.groebner checked by the first criterion alone",
+  "kind": "ideal",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z"
+        ],
+        "order": "lex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                2,
+                1,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1/2",
+              "exponents": [
+                0,
+                0,
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "2",
+              "exponents": [
+                1,
+                2,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                1,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "3",
+              "exponents": [
+                1,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                1,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "certificate": "s_pairs"
+  },
+  "expect": {
+    "basis": [
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              0,
+              7
+            ]
+          },
+          {
+            "coefficient": "-1/162",
+            "exponents": [
+              0,
+              0,
+              1
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "coefficient": "-9",
+            "exponents": [
+              0,
+              0,
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "coefficient": "-3",
+            "exponents": [
+              0,
+              0,
+              2
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

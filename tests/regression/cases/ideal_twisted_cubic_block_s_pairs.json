@@ -1,0 +1,180 @@
+{
+  "name": "ideal_twisted_cubic_block_s_pairs",
+  "note": "certificate s_pairs: the same basis; lm = yw, xw, xz in the block order, so the pairs are (0, 1) and (1, 2); gb.groebner checked",
+  "kind": "ideal",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z",
+          "w"
+        ],
+        "order": {
+          "block": [
+            {
+              "count": 1,
+              "order": "lex"
+            },
+            {
+              "count": 3,
+              "order": "grlex"
+            }
+          ]
+        }
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                2,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                1,
+                1,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                0,
+                1,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                0,
+                2,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "certificate": "s_pairs"
+  },
+  "expect": {
+    "basis": [
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "coefficient": "-1",
+            "exponents": [
+              0,
+              0,
+              2,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              1,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "coefficient": "-1",
+            "exponents": [
+              0,
+              1,
+              1,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              1,
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "coefficient": "-1",
+            "exponents": [
+              0,
+              2,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "name": "ideal_normal_form_small_lex",
+  "note": "f = x^3 + y^3 + z^3 - xyz modulo the F of ideal_small_lex: x -> 3z^2, y -> 9z^3 give 729 z^9 + z^3, and z^7 -> z/162 gives r = 11/2 z^3",
+  "kind": "ideal_normal_form",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z"
+        ],
+        "order": "lex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                2,
+                1,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1/2",
+              "exponents": [
+                0,
+                0,
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "2",
+              "exponents": [
+                1,
+                2,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                1,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "3",
+              "exponents": [
+                1,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                1,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "polynomial": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "1",
+          "exponents": [
+            3,
+            0,
+            0
+          ]
+        },
+        {
+          "coefficient": "-1",
+          "exponents": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "coefficient": "1",
+          "exponents": [
+            0,
+            3,
+            0
+          ]
+        },
+        {
+          "coefficient": "1",
+          "exponents": [
+            0,
+            0,
+            3
+          ]
+        }
+      ]
+    },
+    "certificate": "representation"
+  },
+  "expect": {
+    "remainder": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "11/2",
+          "exponents": [
+            0,
+            0,
+            3
+          ]
+        }
+      ]
+    },
+    "basis": [
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              0,
+              7
+            ]
+          },
+          {
+            "coefficient": "-1/162",
+            "exponents": [
+              0,
+              0,
+              1
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "coefficient": "-9",
+            "exponents": [
+              0,
+              0,
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "coefficient": "-3",
+            "exponents": [
+              0,
+              0,
+              2
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

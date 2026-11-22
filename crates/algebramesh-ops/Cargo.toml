@@ -1,0 +1,19 @@
+[package]
+name = "algebramesh-ops"
+description = "The operations of AlgebraMesh: their names, typed arguments and results, and descriptors (ADR 0022)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# Only these three (Issue #54): backends, verifiers and clients share the
+# definitions without pulling in anything else.
+[dependencies]
+algebramesh-math-types.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,216 @@
+{
+  "name": "ideal_membership_twisted_cubic_not_in",
+  "note": "f = y^3 - x w^2: y^3 -> x y z -> x^2 w by y^2 - xz and yz - xw, so r = x^2 w - x w^2 != 0 and f is not in I; G and r are unique",
+  "kind": "ideal_membership",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z",
+          "w"
+        ],
+        "order": "grevlex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                2,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                1,
+                1,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                0,
+                1,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                0,
+                2,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "polynomial": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "-1",
+          "exponents": [
+            1,
+            0,
+            0,
+            2
+          ]
+        },
+        {
+          "coefficient": "1",
+          "exponents": [
+            0,
+            3,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "certificate": "representation"
+  },
+  "expect": {
+    "member": false,
+    "basis": [
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "-1",
+            "exponents": [
+              0,
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              0,
+              2,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "-1",
+            "exponents": [
+              1,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              1,
+              1,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "-1",
+            "exponents": [
+              1,
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              2,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    ],
+    "remainder": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "1",
+          "exponents": [
+            2,
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "coefficient": "-1",
+          "exponents": [
+            1,
+            0,
+            0,
+            2
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+AlgebraMesh worker image with Macaulay2 (agent-macaulay2)
+
+AlgebraMesh (/usr/local/bin/algebramesh and /opt/algebramesh/drivers) is
+distributed under the MIT License (LICENSE in this directory). The Rust crates
+it contains are listed with their licenses in THIRD-PARTY-LICENSES.txt.
+
+The rest of the image consists of Debian packages, including Macaulay2, 4ti2,
+normaliz, Singular and FLINT. Most of them are distributed under the GNU General
+Public License, version 2 or 3 or later. The license of each package is in
+/usr/share/doc/<package>/copyright.
+
+debian-packages.txt in this directory lists every installed package with its
+version, written when the image was built. The source code of each of these
+versions is available from the Debian archive, for example
+https://snapshot.debian.org/package/<source package>/<version>/.
+
+See docs/licenses.md in the AlgebraMesh repository for the details.

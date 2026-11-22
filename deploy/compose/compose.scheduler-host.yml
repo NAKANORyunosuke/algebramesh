@@ -1,0 +1,78 @@
+# The scheduler host of a deployment on several machines: the scheduler and one
+# Asir worker. Workers on other machines use compose.worker-host.yml.
+#
+#   SCHEDULER_NAMES="--host sched.example.org" \
+#   REMOTE_AGENTS="worker-c worker-c-m2" \
+#     docker compose -f deploy/compose/compose.scheduler-host.yml up -d
+#
+# The scheduler port is published on SCHEDULER_BIND (default 127.0.0.1:50051).
+# Reach it from other machines through the network you trust (a VPN address, or
+# an SSH tunnel to the loopback port). `certs` writes the CA, the scheduler
+# certificate for `scheduler`, `localhost`, `host.docker.internal` and
+# SCHEDULER_NAMES, the tokens, and a client certificate for worker-b and for each
+# name in REMOTE_AGENTS. Copy ca.pem, agent.token, client.token and the remote
+# workers' certificates (agents/<name>.pem, agents/<name>-key.pem) to the worker
+# hosts; ca-key.pem stays here.
+name: algebramesh-scheduler-host
+
+x-build: &build
+  context: ../..
+  dockerfile: deploy/docker/algebramesh.Dockerfile
+  args:
+    ASIR_IMAGE: ${ASIR_IMAGE:-ghcr.io/nakanoryunosuke/risa-asir-container@sha256:a572b603f710167f708e976900ba883b44c03ecf51378e87a796b7b127bf0aed}
+    ALGEBRAMESH_BUILD_COMMIT: ${ALGEBRAMESH_BUILD_COMMIT:-}
+    ALGEBRAMESH_BUILD_CLEAN: ${ALGEBRAMESH_BUILD_CLEAN:-}
+
+services:
+  certs:
+    build: { <<: *build, target: cli }
+    image: algebramesh-cli:dev
+    user: "0"
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >-
+        (test -f /pki/ca.pem || algebramesh certs generate --out /pki
+        --host scheduler --host localhost --host host.docker.internal ${SCHEDULER_NAMES:-})
+        && for n in worker-b ${REMOTE_AGENTS:-}; do
+        test -f /pki/agents/$$n.pem || algebramesh certs agent --ca-dir /pki --name $$n --out /pki/agents >/dev/null || exit 1;
+        done
+        && chmod -R a+rX /pki && chmod 0644 /pki/*.pem /pki/*.token /pki/agents/*
+    volumes: [pki:/pki]
+
+  scheduler:
+    image: algebramesh-cli:dev
+    command: [server, start, --config, /config/server.toml]
+    ports: ["${SCHEDULER_BIND:-127.0.0.1:50051}:50051"]
+    volumes:
+      - pki:/pki:ro
+      - state:/var/lib/algebramesh
+      - ./config:/config:ro
+    depends_on:
+      certs: { condition: service_completed_successfully }
+    restart: on-failure
+
+  worker-b:
+    build: { <<: *build, target: agent-asir }
+    image: algebramesh-agent-asir:dev
+    hostname: worker-b
+    command: [worker, start, --config, /config/worker-asir.toml,
+              --tls-cert, /pki/agents/worker-b.pem, --tls-key, /pki/agents/worker-b-key.pem]
+    environment: { RUST_LOG: info }
+    volumes: [pki:/pki:ro, ./config:/config:ro]
+    depends_on: [scheduler]
+    restart: on-failure
+
+  client:
+    image: algebramesh-cli:dev
+    profiles: [tools]
+    environment:
+      ALGEBRAMESH_SERVER: https://scheduler:50051
+      ALGEBRAMESH_CA: /pki/ca.pem
+      ALGEBRAMESH_TOKEN_FILE: /pki/client.token
+      RUST_LOG: warn
+    volumes: [pki:/pki:ro, ../..:/repo:ro]
+    working_dir: /repo
+
+volumes:
+  pki:
+  state:

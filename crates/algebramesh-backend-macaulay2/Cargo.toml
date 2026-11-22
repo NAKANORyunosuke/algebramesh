@@ -1,0 +1,35 @@
+[package]
+name = "algebramesh-backend-macaulay2"
+description = "Macaulay2 backend: driver subprocess for factorization, matrices, ideals, modules and, with pkg-gkz and pkg-topology, GKZ systems and simplicial homology."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+algebramesh-core.workspace = true
+algebramesh-gkz = { workspace = true, optional = true }
+algebramesh-topology = { workspace = true, optional = true }
+algebramesh-math-types.workspace = true
+algebramesh-ops.workspace = true
+num-bigint.workspace = true
+num-rational.workspace = true
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio = { workspace = true, features = ["rt"] }
+
+[features]
+# The GKZ package (Issues #99, #100): gkz.generate, gkz.indicial, gkz.series.
+pkg-gkz = ["dep:algebramesh-gkz"]
+# The topology package (Issue #103): simplicial.homology.
+pkg-topology = ["dep:algebramesh-topology"]
+
+[dev-dependencies]
+algebramesh-verify.workspace = true
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+
+[lints]
+workspace = true

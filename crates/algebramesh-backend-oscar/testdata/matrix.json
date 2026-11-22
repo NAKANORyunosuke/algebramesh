@@ -1,0 +1,47 @@
+[
+  {
+    "operation": "matrix.smith_normal_form",
+    "arguments": {"domain": "ZZ", "matrix": [["2", "4"], ["6", "8"]]},
+    "reply": {"diagonal":["2","4"],"type":"smith_normal_form","certificate":{"left":{"inverse":[["1","1"],["3","2"]],"transform":[["-2","1"],["3","-1"]]},"right":{"inverse":[["1","0"],["0","1"]],"transform":[["1","0"],["0","1"]]}}}
+  },
+  {
+    "operation": "matrix.hermite_normal_form",
+    "arguments": {"domain": "ZZ", "matrix": [["2", "4"], ["6", "8"]]},
+    "reply": {"type":"hermite_normal_form","form":[["2","0"],["0","4"]],"certificate":{"inverse":[["1","1"],["3","2"]],"transform":[["-2","1"],["3","-1"]]}}
+  },
+  {
+    "operation": "matrix.rank",
+    "arguments": {"domain": "QQ", "matrix": [["1", "2", "3"], ["2", "4", "6"], ["1", "0", "1"]]},
+    "reply": {"rank":2,"type":"matrix_rank","certificate":{"kernel":[["1"],["1"],["-1"]],"minor":{"rows":[0,2],"inverse":[["0","1"],["1/2","-1/2"]],"columns":[0,1]}}}
+  },
+  {
+    "operation": "matrix.kernel",
+    "arguments": {"domain": "QQ", "matrix": [["1", "2", "3"], ["2", "4", "6"], ["1", "0", "1"]]},
+    "reply": {"basis":[["1"],["1"],["-1"]],"type":"matrix_kernel","certificate":{"minor":{"rows":[0,2],"inverse":[["0","1"],["1/2","-1/2"]],"columns":[0,1]}}}
+  },
+  {
+    "operation": "matrix.kernel",
+    "arguments": {"domain": "ZZ", "matrix": [["2", "4"]]},
+    "reply": {"basis":[["-2"],["1"]],"type":"matrix_kernel","certificate":{"inverse":[["1","0"],["2","1"]],"transform":[["1","0"],["-2","1"]]}}
+  },
+  {
+    "operation": "matrix.solve",
+    "arguments": {"domain": "ZZ", "matrix": [["2", "4"]], "rhs": ["1"]},
+    "reply": {"solution":null,"type":"matrix_solution","certificate":{"y":["1/2"]}}
+  },
+  {
+    "operation": "matrix.solve",
+    "arguments": {"domain": "ZZ", "matrix": [["2", "4"]], "rhs": ["6"]},
+    "reply": {"solution":["3","0"],"type":"matrix_solution"}
+  },
+  {
+    "operation": "matrix.solve",
+    "arguments": {"domain": "QQ", "matrix": [["1", "2"], ["2", "4"]], "rhs": ["1", "3"]},
+    "reply": {"solution":null,"type":"matrix_solution","certificate":{"y":["-2","1"]}}
+  },
+  {
+    "operation": "matrix.rank",
+    "arguments": {"domain": "ZZ", "matrix": [["1", "0"], ["0", "1"]]},
+    "reply": {"rank":2,"type":"matrix_rank","certificate":{"kernel":[[],[]],"minor":{"rows":[0,1],"inverse":[["1","0"],["0","1"]],"columns":[0,1]}}}
+  }
+]

@@ -1,0 +1,132 @@
+{
+  "name": "module_syzygies_twisted_cubic",
+  "note": "the syzygies of F = [xz - y^2, xw - yz, yw - z^2]: the two relations of the 2 x 2 minors of [[x, y, z], [y, z, w]]",
+  "kind": "module",
+  "operation": "module.syzygies",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "module": {
+      "type": "submodule",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z",
+          "w"
+        ],
+        "order": "grevlex"
+      },
+      "rank": 1,
+      "generators": {
+        "type": "polynomial_matrix",
+        "rows": 1,
+        "columns": [
+          [
+            {
+              "row": 0,
+              "entry": {
+                "type": "polynomial",
+                "terms": [
+                  {
+                    "coefficient": "1",
+                    "exponents": [
+                      1,
+                      0,
+                      1,
+                      0
+                    ]
+                  },
+                  {
+                    "coefficient": "-1",
+                    "exponents": [
+                      0,
+                      2,
+                      0,
+                      0
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          [
+            {
+              "row": 0,
+              "entry": {
+                "type": "polynomial",
+                "terms": [
+                  {
+                    "coefficient": "1",
+                    "exponents": [
+                      1,
+                      0,
+                      0,
+                      1
+                    ]
+                  },
+                  {
+                    "coefficient": "-1",
+                    "exponents": [
+                      0,
+                      1,
+                      1,
+                      0
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          [
+            {
+              "row": 0,
+              "entry": {
+                "type": "polynomial",
+                "terms": [
+                  {
+                    "coefficient": "1",
+                    "exponents": [
+                      0,
+                      1,
+                      0,
+                      1
+                    ]
+                  },
+                  {
+                    "coefficient": "-1",
+                    "exponents": [
+                      0,
+                      0,
+                      2,
+                      0
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        ]
+      }
+    }
+  },
+  "expect": {
+    "syzygies": 2,
+    "claims": {
+      "syz.annihilates": [
+        "checked",
+        "checked"
+      ],
+      "syz.generates": [
+        "asserted",
+        "asserted"
+      ]
+    },
+    "not_claimed": [
+      "that the columns of S are a minimal set of generators"
+    ]
+  }
+}

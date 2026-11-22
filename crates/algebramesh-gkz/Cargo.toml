@@ -1,0 +1,30 @@
+[package]
+name = "algebramesh-gkz"
+description = "The GKZ package: input validation, operators, the values of the GKZ operations and their checks."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# Of AlgebraMesh the core, the mathematical types, the operations and the
+# checker: a package of research operations (docs/roadmap.md, section 6.1).
+[dependencies]
+algebramesh-core.workspace = true
+algebramesh-math-types.workspace = true
+algebramesh-ops.workspace = true
+algebramesh-verify.workspace = true
+num-bigint.workspace = true
+num-integer.workspace = true
+num-rational.workspace = true
+num-traits.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "time"] }

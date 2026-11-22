@@ -1,0 +1,20 @@
+[package]
+name = "algebramesh-openxm-protocol"
+description = "OpenXM OX framing, byte-order negotiation and CMO codec (sans-IO)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+num-bigint.workspace = true
+num-traits.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true
+
+[lints]
+workspace = true

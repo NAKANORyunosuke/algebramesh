@@ -1,0 +1,26 @@
+# cargo-about: the licenses of the Rust dependencies, for the notices shipped
+# with the binaries, the images and the Python wheel (docs/licenses.md).
+# Regenerate both files after changing Cargo.lock:
+#
+#   cargo about generate --workspace --locked --all-features --fail -o THIRD-PARTY-LICENSES.txt about.hbs
+#   cargo about generate -m bindings/python/Cargo.toml -c about.toml --locked --all-features --fail #       -o bindings/python/THIRD-PARTY-LICENSES.txt about.hbs
+#
+# The first covers every binary and image, the second only the crates compiled
+# into the Python extension module (shipped in the wheel's .dist-info/licenses).
+#
+# The accepted licenses are those allowed in deny.toml.
+accepted = [
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-3-Clause",
+    "ISC",
+    "MIT",
+    "Unicode-3.0",
+    "Unlicense",
+    "Zlib",
+]
+ignore-build-dependencies = false
+ignore-dev-dependencies = true
+
+[private]
+ignore = true

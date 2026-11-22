@@ -1,0 +1,29 @@
+{
+  "name": "matrix_snf_2_4_6_8",
+  "note": "gcd of the entries 2 and |det| 8, so diag(2, 4)",
+  "kind": "matrix",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "operation": "matrix.smith_normal_form",
+  "arguments": {
+    "domain": "ZZ",
+    "matrix": [
+      [
+        "2",
+        "4"
+      ],
+      [
+        "6",
+        "8"
+      ]
+    ]
+  },
+  "expect": {
+    "diagonal": [
+      "2",
+      "4"
+    ]
+  }
+}

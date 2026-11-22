@@ -1,0 +1,26 @@
+[package]
+name = "algebramesh-verify"
+description = "Checks of AlgebraMesh results and the guarantees they record (ADR 0018, ADR 0019)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# Of AlgebraMesh only the core, the mathematical types and the operations: a
+# checker does not depend on what produced the result (Issue #47).
+[dependencies]
+algebramesh-core.workspace = true
+algebramesh-math-types.workspace = true
+algebramesh-ops.workspace = true
+num-bigint.workspace = true
+num-integer.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "time"] }
+
+[lints]
+workspace = true

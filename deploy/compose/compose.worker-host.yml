@@ -1,0 +1,45 @@
+# Workers on a machine other than the scheduler host (compose.scheduler-host.yml).
+#
+#   PKI_DIR=/path/to/pki WORKER_PREFIX=worker-c \
+#     docker compose -f deploy/compose/compose.worker-host.yml up -d
+#
+# PKI_DIR holds ca.pem and agent.token from the scheduler host and the client
+# certificates agents/<WORKER_PREFIX>.pem (Asir) and agents/<WORKER_PREFIX>-m2.pem
+# (Macaulay2) with their keys. The workers connect to SCHEDULER_URL (default
+# https://host.docker.internal:50051, the scheduler port forwarded to this
+# machine's loopback, e.g. by `ssh -L 50051:127.0.0.1:50051 <scheduler host>`).
+name: algebramesh-worker-host
+
+x-build: &build
+  context: ../..
+  dockerfile: deploy/docker/algebramesh.Dockerfile
+  args:
+    ASIR_IMAGE: ${ASIR_IMAGE:-ghcr.io/nakanoryunosuke/risa-asir-container@sha256:a572b603f710167f708e976900ba883b44c03ecf51378e87a796b7b127bf0aed}
+    ALGEBRAMESH_BUILD_COMMIT: ${ALGEBRAMESH_BUILD_COMMIT:-}
+    ALGEBRAMESH_BUILD_CLEAN: ${ALGEBRAMESH_BUILD_CLEAN:-}
+
+x-worker: &worker
+  environment: { RUST_LOG: info }
+  extra_hosts: ["host.docker.internal:host-gateway"]
+  restart: on-failure
+
+services:
+  worker-asir:
+    <<: *worker
+    build: { <<: *build, target: agent-asir }
+    image: algebramesh-agent-asir:dev
+    hostname: ${WORKER_PREFIX:-worker-c}
+    command: [worker, start, --config, /config/worker-asir-remote.toml,
+              --tls-cert, "/pki/agents/${WORKER_PREFIX:-worker-c}.pem",
+              --tls-key, "/pki/agents/${WORKER_PREFIX:-worker-c}-key.pem"]
+    volumes: ["${PKI_DIR:-./pki}:/pki:ro", "./config:/config:ro"]
+
+  worker-m2:
+    <<: *worker
+    build: { <<: *build, target: agent-macaulay2 }
+    image: algebramesh-agent-macaulay2:dev
+    hostname: ${WORKER_PREFIX:-worker-c}-m2
+    command: [worker, start, --config, /config/worker-macaulay2-remote.toml,
+              --tls-cert, "/pki/agents/${WORKER_PREFIX:-worker-c}-m2.pem",
+              --tls-key, "/pki/agents/${WORKER_PREFIX:-worker-c}-m2-key.pem"]
+    volumes: ["${PKI_DIR:-./pki}:/pki:ro", "./config:/config:ro"]

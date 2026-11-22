@@ -1,0 +1,68 @@
+{
+  "name": "gkz_series_rnc_integer",
+  "kind": "gkz_series",
+  "note": "integer (resonant) parameters: x2^2*x3 + x1*x3^2 is a solution; the Gamma-series x1^-1*x2^4 is not",
+  "category": "resonant",
+  "reference": {
+    "holonomic_rank": 2,
+    "sources": [
+      "Singular 4.2.1, holonomicRank of dmodloc.lib (tests/regression/references/holonomic_rank.sing)",
+      "vol(A), computed by run.py"
+    ]
+  },
+  "arguments": {
+    "A": [
+      [
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        2
+      ]
+    ],
+    "beta": [
+      "3",
+      "4"
+    ],
+    "weight": [
+      1,
+      0,
+      1
+    ],
+    "order": 6
+  },
+  "expect": {
+    "holonomic_rank": 2,
+    "resonant": true,
+    "exponents": [
+      {
+        "point": [
+          "-1",
+          "4",
+          "0"
+        ],
+        "multiplicity": 1,
+        "status": "not_a_solution"
+      },
+      {
+        "point": [
+          "0",
+          "2",
+          "1"
+        ],
+        "multiplicity": 1,
+        "status": "verified_to_order",
+        "coefficients": [
+          "1",
+          "1"
+        ]
+      }
+    ]
+  },
+  "backends": [
+    "macaulay2"
+  ]
+}

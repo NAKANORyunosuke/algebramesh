@@ -1,0 +1,11 @@
+# Over compose.raft.yml, for tests/integration/run-mixed-version.sh (ADR 0020,
+# Issue #46): scheduler-c and scheduler-d run an older image,
+# ALGEBRAMESH_OLD_IMAGE, which the script builds from an earlier commit.
+#
+#   docker compose -f deploy/compose/compose.raft.yml \
+#       -f deploy/compose/compose.mixed-version.yml up -d
+services:
+  scheduler-c:
+    image: ${ALGEBRAMESH_OLD_IMAGE:-algebramesh-cli:old}
+  scheduler-d:
+    image: ${ALGEBRAMESH_OLD_IMAGE:-algebramesh-cli:old}

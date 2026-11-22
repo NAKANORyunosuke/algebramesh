@@ -1,0 +1,55 @@
+[package]
+name = "algebramesh-agent"
+description = "Worker agent: registers backends with the scheduler, runs assigned jobs and reports results."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+algebramesh-backend-asir.workspace = true
+algebramesh-backend-macaulay2.workspace = true
+algebramesh-backend-oscar.workspace = true
+algebramesh-core.workspace = true
+algebramesh-gkz = { workspace = true, optional = true }
+algebramesh-topology = { workspace = true, optional = true }
+algebramesh-verify.workspace = true
+algebramesh-openxm-client.workspace = true
+algebramesh-rpc.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tokio-util.workspace = true
+toml.workspace = true
+tonic.workspace = true
+tracing.workspace = true
+uuid.workspace = true
+
+[features]
+default = ["pkg-gkz", "pkg-topology"]
+# The GKZ package (Issues #99, #100): the Macaulay2 backend offers gkz.*, and
+# the agent checks their results.
+pkg-gkz = ["dep:algebramesh-gkz", "algebramesh-backend-macaulay2/pkg-gkz"]
+# The topology package (Issue #103): the Macaulay2 backend offers
+# simplicial.homology, and the agent checks its results.
+pkg-topology = [
+    "dep:algebramesh-topology",
+    "algebramesh-backend-macaulay2/pkg-topology",
+]
+
+[dev-dependencies]
+algebramesh-client.workspace = true
+algebramesh-server = { workspace = true, features = ["fault-injection"] }
+async-trait.workspace = true
+tokio = { workspace = true, features = ["test-util"] }
+tonic.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
+tracing-subscriber.workspace = true
+
+[lints]
+workspace = true

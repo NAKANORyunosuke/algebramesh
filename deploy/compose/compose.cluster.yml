@@ -1,0 +1,133 @@
+# A scheduler and worker agents on one private network, for tests and for trying
+# AlgebraMesh on a single machine. On real hosts, run the scheduler and each
+# worker on its own machine with the same configuration files (see docs/install.md).
+#
+#   docker compose -f deploy/compose/compose.cluster.yml up -d --build
+#   docker compose -f deploy/compose/compose.cluster.yml run --rm client workers
+#
+# The `certs` service creates a private CA, the scheduler certificate, the tokens
+# and a client certificate per worker (mutual TLS) in the `pki` volume on first
+# start. Inside this private test network the keys and tokens are readable by the
+# service users; on real hosts give each service only the files it needs, readable
+# by that service alone, and keep ca-key.pem off the hosts.
+name: algebramesh-cluster
+
+x-build: &build
+  context: ../..
+  dockerfile: deploy/docker/algebramesh.Dockerfile
+  args:
+    ASIR_IMAGE: ${ASIR_IMAGE:-ghcr.io/nakanoryunosuke/risa-asir-container@sha256:a572b603f710167f708e976900ba883b44c03ecf51378e87a796b7b127bf0aed}
+    ALGEBRAMESH_BUILD_COMMIT: ${ALGEBRAMESH_BUILD_COMMIT:-}
+    ALGEBRAMESH_BUILD_CLEAN: ${ALGEBRAMESH_BUILD_CLEAN:-}
+
+x-client-env: &client-env
+  ALGEBRAMESH_SERVER: https://scheduler:50051
+  ALGEBRAMESH_CA: /pki/ca.pem
+  ALGEBRAMESH_TOKEN_FILE: /pki/client.token
+  RUST_LOG: warn
+
+services:
+  certs:
+    build: { <<: *build, target: cli }
+    image: algebramesh-cli:dev
+    user: "0"
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >-
+        (test -f /pki/ca.pem || algebramesh certs generate --out /pki --host scheduler --host localhost)
+        && for n in worker-a worker-b worker-m2 worker-oscar bench-worker; do
+        test -f /pki/agents/$$n.pem || algebramesh certs agent --ca-dir /pki --name $$n --out /pki/agents >/dev/null || exit 1;
+        done
+        && chmod -R a+rX /pki && chmod 0644 /pki/*.pem /pki/*.token /pki/agents/*
+    volumes: [pki:/pki]
+    networks: [mesh]
+
+  scheduler:
+    image: algebramesh-cli:dev
+    command: [server, start, --config, /config/server.toml]
+    volumes:
+      - pki:/pki:ro
+      - state:/var/lib/algebramesh
+      - ./config:/config:ro
+    depends_on:
+      certs: { condition: service_completed_successfully }
+    networks: [mesh]
+
+  worker-a:
+    build: { <<: *build, target: agent-asir }
+    image: algebramesh-agent-asir:dev
+    hostname: worker-a
+    command: [worker, start, --config, /config/worker-asir.toml,
+              --tls-cert, /pki/agents/worker-a.pem, --tls-key, /pki/agents/worker-a-key.pem]
+    environment: { RUST_LOG: info }
+    volumes: [pki:/pki:ro, ./config:/config:ro]
+    depends_on: [scheduler]
+    networks: [mesh]
+
+  worker-b:
+    image: algebramesh-agent-asir:dev
+    hostname: worker-b
+    command: [worker, start, --config, /config/worker-asir.toml,
+              --tls-cert, /pki/agents/worker-b.pem, --tls-key, /pki/agents/worker-b-key.pem]
+    environment: { RUST_LOG: info }
+    volumes: [pki:/pki:ro, ./config:/config:ro]
+    depends_on: [scheduler]
+    networks: [mesh]
+
+  worker-m2:
+    build: { <<: *build, target: agent-macaulay2 }
+    image: algebramesh-agent-macaulay2:dev
+    hostname: worker-m2
+    command: [worker, start, --config, /config/worker-macaulay2.toml,
+              --tls-cert, /pki/agents/worker-m2.pem, --tls-key, /pki/agents/worker-m2-key.pem]
+    environment: { RUST_LOG: info }
+    volumes: [pki:/pki:ro, ./config:/config:ro]
+    depends_on: [scheduler]
+    networks: [mesh]
+
+  worker-oscar:
+    build: { <<: *build, target: agent-oscar }
+    image: algebramesh-agent-oscar:dev
+    hostname: worker-oscar
+    command: [worker, start, --config, /config/worker-oscar.toml,
+              --tls-cert, /pki/agents/worker-oscar.pem, --tls-key, /pki/agents/worker-oscar-key.pem]
+    environment: { RUST_LOG: info }
+    volumes: [pki:/pki:ro, ./config:/config:ro]
+    depends_on: [scheduler]
+    networks: [mesh]
+
+  # One-slot Asir workers for tests/bench/run-bench.sh (scaled with --scale). They
+  # share one certificate, so all of them register as `bench-worker`.
+  bench-worker:
+    image: algebramesh-agent-asir:dev
+    profiles: [bench]
+    command: [worker, start, --config, /config/worker-asir-1slot.toml,
+              --tls-cert, /pki/agents/bench-worker.pem, --tls-key, /pki/agents/bench-worker-key.pem]
+    volumes: [pki:/pki:ro, ./config:/config:ro]
+    depends_on: [scheduler]
+    networks: [mesh]
+
+  client:
+    image: algebramesh-cli:dev
+    profiles: [tools]
+    environment: *client-env
+    volumes: [pki:/pki:ro, ../..:/repo:ro]
+    working_dir: /repo
+    networks: [mesh]
+
+  python-client:
+    build: { <<: *build, target: python-client }
+    image: algebramesh-python-client:dev
+    profiles: [tools]
+    environment: *client-env
+    volumes: [pki:/pki:ro, ../..:/repo:ro]
+    working_dir: /repo
+    networks: [mesh]
+
+volumes:
+  pki:
+  state:
+
+networks:
+  mesh:
+    internal: true

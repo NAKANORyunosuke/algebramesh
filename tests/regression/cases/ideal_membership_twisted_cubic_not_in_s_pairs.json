@@ -1,0 +1,216 @@
+{
+  "name": "ideal_membership_twisted_cubic_not_in_s_pairs",
+  "note": "certificate s_pairs: the same f, basis and remainder x^2 w - x w^2; the pairs (0, 1) and (1, 2); gb.groebner checked, so membership.not_in is checked in effect",
+  "kind": "ideal_membership",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z",
+          "w"
+        ],
+        "order": "grevlex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                2,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                1,
+                1,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                0,
+                1,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                0,
+                2,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "polynomial": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "-1",
+          "exponents": [
+            1,
+            0,
+            0,
+            2
+          ]
+        },
+        {
+          "coefficient": "1",
+          "exponents": [
+            0,
+            3,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "certificate": "s_pairs"
+  },
+  "expect": {
+    "member": false,
+    "basis": [
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "-1",
+            "exponents": [
+              0,
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              0,
+              2,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "-1",
+            "exponents": [
+              1,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              1,
+              1,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "-1",
+            "exponents": [
+              1,
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              2,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    ],
+    "remainder": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "1",
+          "exponents": [
+            2,
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "coefficient": "-1",
+          "exponents": [
+            1,
+            0,
+            0,
+            2
+          ]
+        }
+      ]
+    }
+  }
+}

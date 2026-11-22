@@ -1,0 +1,36 @@
+[package]
+name = "algebramesh-rpc"
+description = "Generated gRPC types for the scheduler API, plus TLS and token authentication helpers."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+hyper-util = { version = "0.1", features = ["client-legacy", "tokio"] }
+prost = "0.14"
+rcgen = { version = "0.14", features = ["x509-parser"] }
+sha2.workspace = true
+thiserror.workspace = true
+tokio = { workspace = true, features = ["net", "time"] }
+time = "0.3"
+tonic.workspace = true
+tonic-prost = "0.14"
+x509-parser = "0.18"
+
+[dev-dependencies]
+# The TLS servers of the handshake tests; the versions and features tonic uses.
+rustls = { version = "0.23", default-features = false, features = ["ring", "std"] }
+tokio = { workspace = true, features = ["macros", "net", "rt-multi-thread", "time"] }
+tokio-rustls = { version = "0.26", default-features = false, features = ["ring", "tls12"] }
+tokio-stream = { workspace = true, features = ["net"] }
+
+[build-dependencies]
+protoc-bin-vendored = "3"
+prost-build = "0.14"
+tonic-prost-build = "0.14"
+
+[lints]
+workspace = true

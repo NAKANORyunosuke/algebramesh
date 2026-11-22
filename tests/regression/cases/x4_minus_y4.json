@@ -1,0 +1,56 @@
+{
+  "name": "x4_minus_y4",
+  "note": "x^4-y^4 = (x-y)(x+y)(x^2+y^2)",
+  "kind": "factor",
+  "backends": [
+    "asir",
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ring": {
+      "domain": "QQ",
+      "variables": [
+        "x",
+        "y"
+      ],
+      "order": "grevlex"
+    },
+    "expression": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "1",
+          "exponents": [
+            4,
+            0
+          ]
+        },
+        {
+          "coefficient": "-1",
+          "exponents": [
+            0,
+            4
+          ]
+        }
+      ]
+    }
+  },
+  "expect": {
+    "constant": "1",
+    "factors": [
+      {
+        "display": "x+y",
+        "multiplicity": 1
+      },
+      {
+        "display": "x-y",
+        "multiplicity": 1
+      },
+      {
+        "display": "x^2+y^2",
+        "multiplicity": 1
+      }
+    ]
+  }
+}

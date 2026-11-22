@@ -1,0 +1,31 @@
+# Scheduler a of the Raft cluster in compose.raft.yml (ADR 0013).
+listen = "0.0.0.0:50051"
+data_dir = "/var/lib/algebramesh"
+tls_cert = "/pki/server.pem"
+tls_key = "/pki/server-key.pem"
+client_token_file = "/pki/client.token"
+agent_token_file = "/pki/agent.token"
+heartbeat_interval_ms = 1000
+heartbeat_timeout_ms = 6000
+max_attempts = 3
+
+[raft]
+node_id = 1
+peer_token_file = "/pki/peer.token"
+ca_file = "/pki/ca.pem"
+election_timeout_ms = 1500
+
+[[raft.members]]
+id = 1
+name = "scheduler-a"
+url = "https://scheduler-a:50051"
+
+[[raft.members]]
+id = 2
+name = "scheduler-b"
+url = "https://scheduler-b:50051"
+
+[[raft.members]]
+id = 3
+name = "scheduler-c"
+url = "https://scheduler-c:50051"

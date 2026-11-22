@@ -1,0 +1,131 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rust:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      # Must match rust-toolchain.toml, which takes precedence over the default
+      # this step sets.
+      - uses: dtolnay/rust-toolchain@1.95.0
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+      - run: cargo test --workspace --all-features --locked
+      # The Python client's input checks, without a scheduler (Issue #34).
+      - run: python3 bindings/python/tests/test_inputs.py
+      - run: python3 tests/regression/test_values.py
+
+  packages:
+    # The research packages are Cargo features (pkg-<name>, ADR 0026): the
+    # rust job builds and tests with all of them, this one without any, so
+    # that the backends and the agent still build and pass their tests
+    # without the packages (Issue #100).
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      # Must match rust-toolchain.toml, as in the rust job.
+      - uses: dtolnay/rust-toolchain@1.95.0
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo clippy -p algebramesh-backend-macaulay2 -p algebramesh-agent --no-default-features --all-targets --locked -- -D warnings
+      - run: cargo test -p algebramesh-backend-macaulay2 -p algebramesh-agent --no-default-features --locked
+
+  licenses:
+    # Only permissive licenses for Rust dependencies (deny.toml, docs/licenses.md).
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check licenses bans sources
+      # THIRD-PARTY-LICENSES.txt must match Cargo.lock (about.toml).
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-about@0.9.3
+      - run: cargo about generate --workspace --locked --all-features --fail -o THIRD-PARTY-LICENSES.txt about.hbs
+      - run: cargo about generate -m bindings/python/Cargo.toml -c about.toml --locked --all-features --fail -o bindings/python/THIRD-PARTY-LICENSES.txt about.hbs
+      - run: git diff --exit-code THIRD-PARTY-LICENSES.txt bindings/python/THIRD-PARTY-LICENSES.txt
+
+  openxm-e2e:
+    # Real ox_asir in Docker; the worker image is pinned by digest.
+    runs-on: ubuntu-24.04
+    needs: rust
+    steps:
+      - uses: actions/checkout@v5
+      - run: sh tests/integration/run-e2e.sh
+
+  fault-e2e:
+    # Scheduler and two Asir workers: a worker is killed and the scheduler restarted.
+    runs-on: ubuntu-24.04
+    needs: rust
+    steps:
+      - uses: actions/checkout@v5
+      - run: sh tests/integration/run-fault-e2e.sh
+
+  raft-e2e:
+    # Three schedulers in a Raft cluster: the leader is cut off from the network,
+    # then killed (ADR 0013).
+    runs-on: ubuntu-24.04
+    needs: rust
+    steps:
+      - uses: actions/checkout@v5
+      - run: sh tests/integration/run-raft-e2e.sh
+
+  mixed-version:
+    # A Raft cluster with a scheduler of a version before the agreement on
+    # features, then updated (ADR 0020, Issue #46). That version is not in the
+    # history of this repository: the job pulls its image, named by the
+    # repository variable ALGEBRAMESH_OLD_IMAGE (by digest), and is skipped
+    # while the variable is not set.
+    if: vars.ALGEBRAMESH_OLD_IMAGE != ''
+    runs-on: ubuntu-24.04
+    needs: rust
+    steps:
+      - uses: actions/checkout@v5
+      - run: sh tests/integration/run-mixed-version.sh
+        env:
+          ALGEBRAMESH_OLD_IMAGE: ${{ vars.ALGEBRAMESH_OLD_IMAGE }}
+
+  disk-full:
+    # A full disk under a scheduler of a Raft cluster, on a tmpfs of 64 MiB in a
+    # container (Issue #37).
+    runs-on: ubuntu-24.04
+    needs: rust
+    steps:
+      - uses: actions/checkout@v5
+      - run: sh tests/integration/run-disk-full.sh
+
+  cas-e2e:
+    # All backends (Asir, Macaulay2, OSCAR), the Python binding and the
+    # mathematical regression suite. The OSCAR image is about 8 GB.
+    runs-on: ubuntu-24.04
+    needs: rust
+    steps:
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          docker system prune -af
+          df -h /
+      - uses: actions/checkout@v5
+      - run: sh tests/integration/run-cluster-e2e.sh
+      - run: sh tests/integration/check-driver-integers.sh
+      # check-driver-orders.sh writes its requests with Rust examples. Must
+      # match rust-toolchain.toml, as in the rust job.
+      - uses: dtolnay/rust-toolchain@1.95.0
+        with:
+          components: rustfmt, clippy
+      - run: sh tests/integration/check-driver-orders.sh
+      - run: sh tests/integration/run-regression.sh

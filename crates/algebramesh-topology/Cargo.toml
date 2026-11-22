@@ -1,0 +1,24 @@
+[package]
+name = "algebramesh-topology"
+description = "The topology package: simplicial complexes, their boundary matrices, the value of simplicial.homology and its checks."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# Of AlgebraMesh the core, the mathematical types, the operations and the
+# checker: a package of research operations (docs/roadmap.md, section 6.1).
+[dependencies]
+algebramesh-core.workspace = true
+algebramesh-math-types.workspace = true
+algebramesh-ops.workspace = true
+algebramesh-verify.workspace = true
+num-bigint.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,269 @@
+{
+  "name": "ideal_normal_form_small_grevlex_s_pairs",
+  "note": "certificate s_pairs: the same remainder 11/18 y and basis; lm = z^2, xz, x^2, y^2 z, y^3, xy^2, nine pairs of fifteen; gb.groebner checked, so normal_form.unique is checked in effect",
+  "kind": "ideal_normal_form",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z"
+        ],
+        "order": "grevlex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                2,
+                1,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1/2",
+              "exponents": [
+                0,
+                0,
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "2",
+              "exponents": [
+                1,
+                2,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                1,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "3",
+              "exponents": [
+                1,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                1,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "polynomial": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "1",
+          "exponents": [
+            3,
+            0,
+            0
+          ]
+        },
+        {
+          "coefficient": "-1",
+          "exponents": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "coefficient": "1",
+          "exponents": [
+            0,
+            3,
+            0
+          ]
+        },
+        {
+          "coefficient": "1",
+          "exponents": [
+            0,
+            0,
+            3
+          ]
+        }
+      ]
+    },
+    "certificate": "s_pairs"
+  },
+  "expect": {
+    "remainder": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "11/18",
+          "exponents": [
+            0,
+            1,
+            0
+          ]
+        }
+      ]
+    },
+    "basis": [
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "-1/3",
+            "exponents": [
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              0,
+              2
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "coefficient": "-1/3",
+            "exponents": [
+              0,
+              1,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              2,
+              0,
+              0
+            ]
+          },
+          {
+            "coefficient": "-1",
+            "exponents": [
+              0,
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              2,
+              1
+            ]
+          },
+          {
+            "coefficient": "-1/2",
+            "exponents": [
+              0,
+              0,
+              1
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              3,
+              0
+            ]
+          },
+          {
+            "coefficient": "-1/2",
+            "exponents": [
+              0,
+              1,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              1,
+              2,
+              0
+            ]
+          },
+          {
+            "coefficient": "-1/2",
+            "exponents": [
+              1,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

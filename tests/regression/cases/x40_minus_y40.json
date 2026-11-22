@@ -1,0 +1,76 @@
+{
+  "name": "x40_minus_y40",
+  "note": "cyclotomic factors Phi_d(x,y) for d | 40",
+  "kind": "factor",
+  "backends": [
+    "asir",
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ring": {
+      "domain": "ZZ",
+      "variables": [
+        "x",
+        "y"
+      ],
+      "order": "grevlex"
+    },
+    "expression": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "1",
+          "exponents": [
+            40,
+            0
+          ]
+        },
+        {
+          "coefficient": "-1",
+          "exponents": [
+            0,
+            40
+          ]
+        }
+      ]
+    }
+  },
+  "expect": {
+    "constant": "1",
+    "factors": [
+      {
+        "display": "x+y",
+        "multiplicity": 1
+      },
+      {
+        "display": "x-y",
+        "multiplicity": 1
+      },
+      {
+        "display": "x^16-x^12*y^4+x^8*y^8-x^4*y^12+y^16",
+        "multiplicity": 1
+      },
+      {
+        "display": "x^2+y^2",
+        "multiplicity": 1
+      },
+      {
+        "display": "x^4+x^3*y+x^2*y^2+x*y^3+y^4",
+        "multiplicity": 1
+      },
+      {
+        "display": "x^4+y^4",
+        "multiplicity": 1
+      },
+      {
+        "display": "x^4-x^3*y+x^2*y^2-x*y^3+y^4",
+        "multiplicity": 1
+      },
+      {
+        "display": "x^8-x^6*y^2+x^4*y^4-x^2*y^6+y^8",
+        "multiplicity": 1
+      }
+    ]
+  }
+}

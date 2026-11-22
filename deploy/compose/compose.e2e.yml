@@ -1,0 +1,51 @@
+# End-to-end test: the algebramesh CLI waits on a private network and a Risa/Asir
+# worker reverse-connects with ox_launch. No port is published to the host.
+#
+#   docker compose -f deploy/compose/compose.e2e.yml up --build \
+#     --abort-on-container-exit --exit-code-from algebramesh
+#
+# The worker image comes from NAKANORyunosuke/Risa-Asir-container (an optional
+# external dependency, pinned by digest). Override ASIR_IMAGE to use another build.
+name: algebramesh-e2e
+
+services:
+  algebramesh:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/algebramesh.Dockerfile
+      target: cli
+      args:
+        ALGEBRAMESH_BUILD_COMMIT: ${ALGEBRAMESH_BUILD_COMMIT:-}
+        ALGEBRAMESH_BUILD_CLEAN: ${ALGEBRAMESH_BUILD_CLEAN:-}
+    image: algebramesh-cli:dev
+    hostname: algebramesh
+    command:
+      - run
+      - /jobs/${JOB:-examples/factor.json}
+      - --listen=0.0.0.0
+      - --control-port=40101
+      - --data-port=40102
+      - --advertise-host=algebramesh
+      - --accept-timeout=60
+      - --asir-build=${ASIR_IMAGE:-ghcr.io/nakanoryunosuke/risa-asir-container@sha256:a572b603f710167f708e976900ba883b44c03ecf51378e87a796b7b127bf0aed}
+      - --pretty
+    volumes:
+      - ../..:/jobs:ro
+    networks: [openxm]
+
+  asir-worker:
+    image: ${ASIR_IMAGE:-ghcr.io/nakanoryunosuke/risa-asir-container@sha256:a572b603f710167f708e976900ba883b44c03ecf51378e87a796b7b127bf0aed}
+    entrypoint: ["/bin/sh", "/algebramesh/asir-worker-entrypoint.sh"]
+    environment:
+      ALGEBRAMESH_HOST: algebramesh
+      ALGEBRAMESH_CONTROL_PORT: "40101"
+      ALGEBRAMESH_DATA_PORT: "40102"
+      ONESHOT: "1"
+    volumes:
+      - ../docker/asir-worker-entrypoint.sh:/algebramesh/asir-worker-entrypoint.sh:ro
+    depends_on: [algebramesh]
+    networks: [openxm]
+
+networks:
+  openxm:
+    internal: true

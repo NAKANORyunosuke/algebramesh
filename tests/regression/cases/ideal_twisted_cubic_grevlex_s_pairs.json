@@ -1,0 +1,169 @@
+{
+  "name": "ideal_twisted_cubic_grevlex_s_pairs",
+  "note": "certificate s_pairs: the same basis; lm = z^2, yz, y^2, so the pairs are (0, 1) and (1, 2), and (0, 2) is coprime; gb.groebner checked",
+  "kind": "ideal",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z",
+          "w"
+        ],
+        "order": "grevlex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                2,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                1,
+                1,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                0,
+                1,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                0,
+                2,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "certificate": "s_pairs"
+  },
+  "expect": {
+    "basis": [
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "-1",
+            "exponents": [
+              0,
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              0,
+              2,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "-1",
+            "exponents": [
+              1,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              1,
+              1,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "-1",
+            "exponents": [
+              1,
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              2,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+listen = "0.0.0.0:50051"
+data_dir = "/var/lib/algebramesh"
+tls_cert = "/pki/server.pem"
+tls_key = "/pki/server-key.pem"
+client_token_file = "/pki/client.token"
+agent_token_file = "/pki/agent.token"
+# Agents present the client certificates the `certs` service issues.
+agent_ca_file = "/pki/ca.pem"
+heartbeat_interval_ms = 1000
+heartbeat_timeout_ms = 6000
+max_attempts = 3

@@ -1,0 +1,22 @@
+AlgebraMesh worker image with OSCAR (agent-oscar)
+
+AlgebraMesh (/usr/local/bin/algebramesh and /opt/algebramesh/drivers) is
+distributed under the MIT License (LICENSE in this directory). The Rust crates
+it contains are listed with their licenses in THIRD-PARTY-LICENSES.txt.
+
+The rest of the image consists of Julia (MIT License), the Julia packages in
+/opt/julia-depot/packages and the binary artifacts in /opt/julia-depot/artifacts.
+OSCAR (Oscar.jl) is distributed under the GNU General Public License, version 3
+or later. Many artifacts (Singular, polymake, GAP and its packages, normaliz,
+FLINT and others) are distributed under the GNU General Public License or the
+GNU Lesser General Public License. The license files are in the package
+directories and in /opt/julia-depot/artifacts/*/share/licenses.
+
+/opt/algebramesh-oscar/Manifest.toml lists every Julia package with its version
+and source tree hash. julia-artifacts.txt in this directory lists the artifacts
+with their license directories, written when the image was built. The source
+code of the packages is in their repositories (see the General registry,
+https://github.com/JuliaRegistries/General), and the build recipes and source
+references of the artifacts are in https://github.com/JuliaPackaging/Yggdrasil.
+
+See docs/licenses.md in the AlgebraMesh repository for the details.

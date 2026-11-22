@@ -1,0 +1,49 @@
+{
+  "name": "half_x2_minus_half",
+  "note": "content 1/2 over QQ",
+  "kind": "factor",
+  "backends": [
+    "asir",
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ring": {
+      "domain": "QQ",
+      "variables": [
+        "x"
+      ],
+      "order": "grevlex"
+    },
+    "expression": {
+      "type": "polynomial",
+      "terms": [
+        {
+          "coefficient": "1/2",
+          "exponents": [
+            2
+          ]
+        },
+        {
+          "coefficient": "-1/2",
+          "exponents": [
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "expect": {
+    "constant": "1/2",
+    "factors": [
+      {
+        "display": "x+1",
+        "multiplicity": 1
+      },
+      {
+        "display": "x-1",
+        "multiplicity": 1
+      }
+    ]
+  }
+}

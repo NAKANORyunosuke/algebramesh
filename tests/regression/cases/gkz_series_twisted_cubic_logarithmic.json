@@ -1,0 +1,83 @@
+{
+  "name": "gkz_series_twisted_cubic_logarithmic",
+  "kind": "gkz_series",
+  "note": "twisted cubic, beta=0, weight (1,0,0,1): the exponent 0 has multiplicity 3; the solutions are 1 and two logarithmic series in the directions (1,-2,1,0) and (2,-3,0,1)",
+  "category": "resonant",
+  "reference": {
+    "holonomic_rank": 3,
+    "sources": [
+      "Singular 4.2.1, holonomicRank of dmodloc.lib (tests/regression/references/holonomic_rank.sing)",
+      "vol(A), computed by run.py"
+    ]
+  },
+  "arguments": {
+    "A": [
+      [
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ],
+    "beta": [
+      "0",
+      "0"
+    ],
+    "weight": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "order": 4
+  },
+  "expect": {
+    "holonomic_rank": 3,
+    "resonant": true,
+    "exponents": [
+      {
+        "point": [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "multiplicity": 3,
+        "status": "logarithmic",
+        "solutions": [
+          {
+            "status": "verified_to_order",
+            "direction": null
+          },
+          {
+            "status": "verified_to_order",
+            "direction": [
+              1,
+              -2,
+              1,
+              0
+            ]
+          },
+          {
+            "status": "verified_to_order",
+            "direction": [
+              2,
+              -3,
+              0,
+              1
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "backends": [
+    "macaulay2"
+  ]
+}

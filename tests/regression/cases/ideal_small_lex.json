@@ -1,0 +1,156 @@
+{
+  "name": "ideal_small_lex",
+  "note": "F = {x^2y - z/2, 2xy^2 - x, 3xz - y}, lex: G = [z^7 - z/162, y - 9z^3, x - 3z^2]; its grevlex basis (ideal_small_grevlex) is another one",
+  "kind": "ideal",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z"
+        ],
+        "order": "lex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                2,
+                1,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1/2",
+              "exponents": [
+                0,
+                0,
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "2",
+              "exponents": [
+                1,
+                2,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                1,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "3",
+              "exponents": [
+                1,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                1,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "certificate": "representation"
+  },
+  "expect": {
+    "basis": [
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              0,
+              7
+            ]
+          },
+          {
+            "coefficient": "-1/162",
+            "exponents": [
+              0,
+              0,
+              1
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "coefficient": "-9",
+            "exponents": [
+              0,
+              0,
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "type": "polynomial",
+        "terms": [
+          {
+            "coefficient": "1",
+            "exponents": [
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "coefficient": "-3",
+            "exponents": [
+              0,
+              0,
+              2
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

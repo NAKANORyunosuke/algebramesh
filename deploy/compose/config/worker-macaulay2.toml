@@ -1,0 +1,10 @@
+server = "https://scheduler:50051"
+ca_file = "/pki/ca.pem"
+token_file = "/pki/agent.token"
+
+[[backends]]
+kind = "macaulay2"
+slots = 2
+m2 = "M2"
+driver = "/opt/algebramesh/drivers/macaulay2/algebramesh.m2"
+build = "debian:trixie-slim macaulay2 1.24.11+ds-5+b1, 4ti2 1.6.10+ds-1.1+b2"

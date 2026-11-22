@@ -1,0 +1,80 @@
+{
+  "name": "module_resolution_unit_ideal",
+  "note": "the unit ideal: R <- R with d_1 = (1), which is not minimal",
+  "kind": "module",
+  "operation": "complex.free_resolution",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z",
+          "w"
+        ],
+        "order": "grevlex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                0,
+                0,
+                0,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "certificate": "include"
+  },
+  "expect": {
+    "degrees": [
+      [
+        0
+      ],
+      [
+        0
+      ]
+    ],
+    "betti": null,
+    "claims": {
+      "res.complex": [
+        "checked",
+        "checked"
+      ],
+      "res.image": [
+        "checked",
+        "checked"
+      ],
+      "res.input_homogeneous": [
+        "checked",
+        "checked"
+      ],
+      "res.differentials_homogeneous": [
+        "checked",
+        "checked"
+      ],
+      "res.exact": [
+        "asserted",
+        "asserted"
+      ]
+    },
+    "not_claimed": [
+      "res.entries_in_maximal_ideal",
+      "res.minimal",
+      "res.betti"
+    ]
+  }
+}

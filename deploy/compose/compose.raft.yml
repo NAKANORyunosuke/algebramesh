@@ -1,0 +1,112 @@
+# A Raft cluster of three schedulers with one Asir worker (ADR 0013), for
+# tests/integration/run-raft-e2e.sh.
+#
+#   docker compose -f deploy/compose/compose.raft.yml up -d --build
+#
+# The schedulers share the CA, the server certificate (valid for all three names)
+# and the tokens in the `pki` volume; each has its own data volume. They, the
+# worker and the client meet on `mesh`. Each scheduler is also on a network of its
+# own (`side-a`, ...), on which a client can still reach it when it is cut off
+# from `mesh` (`docker network disconnect`). scheduler-d (profile `join`) is not
+# in the first cluster: it starts with `join = true` and waits to be added
+# (`algebramesh server add-member`), with a certificate from `certs server`.
+name: algebramesh-raft
+
+x-build: &build
+  context: ../..
+  dockerfile: deploy/docker/algebramesh.Dockerfile
+  args:
+    ASIR_IMAGE: ${ASIR_IMAGE:-ghcr.io/nakanoryunosuke/risa-asir-container@sha256:a572b603f710167f708e976900ba883b44c03ecf51378e87a796b7b127bf0aed}
+    ALGEBRAMESH_BUILD_COMMIT: ${ALGEBRAMESH_BUILD_COMMIT:-}
+    ALGEBRAMESH_BUILD_CLEAN: ${ALGEBRAMESH_BUILD_CLEAN:-}
+
+x-scheduler: &scheduler
+  image: algebramesh-cli:dev
+  environment: { RUST_LOG: "info,openraft=error" }
+  depends_on:
+    certs: { condition: service_completed_successfully }
+
+x-client-env: &client-env
+  ALGEBRAMESH_SERVER: https://scheduler-a:50051,https://scheduler-b:50051,https://scheduler-c:50051,https://scheduler-d:50051
+  ALGEBRAMESH_CA: /pki/ca.pem
+  ALGEBRAMESH_TOKEN_FILE: /pki/client.token
+  RUST_LOG: warn
+
+services:
+  certs:
+    build: { <<: *build, target: cli }
+    image: algebramesh-cli:dev
+    user: "0"
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >-
+        (test -f /pki/ca.pem || algebramesh certs generate --out /pki
+        --host scheduler-a --host scheduler-b --host scheduler-c --host localhost)
+        && (test -f /pki/peer.token || od -An -tx1 -N32 /dev/urandom | tr -d ' \n' > /pki/peer.token)
+        && chmod 0755 /pki && chmod 0644 /pki/*
+    volumes: [pki:/pki]
+    networks: [mesh]
+
+  scheduler-a:
+    <<: *scheduler
+    hostname: scheduler-a
+    command: [server, start, --config, /config/server-raft-a.toml]
+    volumes: [pki:/pki:ro, state-a:/var/lib/algebramesh, ./config:/config:ro]
+    networks: [mesh, side-a]
+
+  scheduler-b:
+    <<: *scheduler
+    hostname: scheduler-b
+    command: [server, start, --config, /config/server-raft-b.toml]
+    volumes: [pki:/pki:ro, state-b:/var/lib/algebramesh, ./config:/config:ro]
+    networks: [mesh, side-b]
+
+  scheduler-c:
+    <<: *scheduler
+    hostname: scheduler-c
+    command: [server, start, --config, /config/server-raft-c.toml]
+    volumes: [pki:/pki:ro, state-c:/var/lib/algebramesh, ./config:/config:ro]
+    networks: [mesh, side-c]
+
+  scheduler-d:
+    <<: *scheduler
+    profiles: [join]
+    hostname: scheduler-d
+    command: [server, start, --config, /config/server-raft-d.toml]
+    volumes: [pki:/pki:ro, state-d:/var/lib/algebramesh, ./config:/config:ro]
+    networks: [mesh]
+
+  worker-a:
+    build: { <<: *build, target: agent-asir }
+    image: algebramesh-agent-asir:dev
+    hostname: worker-a
+    command: [worker, start, --config, /config/worker-asir-raft.toml]
+    environment: { RUST_LOG: info }
+    volumes: [pki:/pki:ro, ./config:/config:ro]
+    depends_on: [scheduler-a, scheduler-b, scheduler-c]
+    networks: [mesh]
+
+  client:
+    image: algebramesh-cli:dev
+    profiles: [tools]
+    environment: *client-env
+    volumes: [pki:/pki:ro, ../..:/repo:ro]
+    working_dir: /repo
+    networks: [mesh]
+
+volumes:
+  pki:
+  state-a:
+  state-b:
+  state-c:
+  state-d:
+
+networks:
+  mesh:
+    internal: true
+  side-a:
+    internal: true
+  side-b:
+    internal: true
+  side-c:
+    internal: true

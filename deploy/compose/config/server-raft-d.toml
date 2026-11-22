@@ -1,0 +1,23 @@
+# Scheduler d of compose.raft.yml: it joins the running cluster (ADR 0013) and
+# waits until the leader adds it with `algebramesh server add-member`.
+listen = "0.0.0.0:50051"
+data_dir = "/var/lib/algebramesh"
+tls_cert = "/pki/server-d.pem"
+tls_key = "/pki/server-d-key.pem"
+client_token_file = "/pki/client.token"
+agent_token_file = "/pki/agent.token"
+heartbeat_interval_ms = 1000
+heartbeat_timeout_ms = 6000
+max_attempts = 3
+
+[raft]
+node_id = 4
+peer_token_file = "/pki/peer.token"
+ca_file = "/pki/ca.pem"
+election_timeout_ms = 1500
+join = true
+
+[[raft.members]]
+id = 4
+name = "scheduler-d"
+url = "https://scheduler-d:50051"

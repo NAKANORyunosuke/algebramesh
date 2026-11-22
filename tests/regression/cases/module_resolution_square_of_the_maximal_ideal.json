@@ -1,0 +1,192 @@
+{
+  "name": "module_resolution_square_of_the_maximal_ideal",
+  "note": "R/m^2 for m = (x, y, z) in QQ[x, y, z]: the Eagon-Northcott resolution, Betti numbers 1, 6, 8, 3",
+  "kind": "module",
+  "operation": "complex.free_resolution",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z"
+        ],
+        "order": "grevlex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                2,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                1,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                0,
+                2,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                0,
+                1,
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                0,
+                0,
+                2
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "certificate": "include"
+  },
+  "expect": {
+    "degrees": [
+      [
+        0
+      ],
+      [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      [
+        4,
+        4,
+        4
+      ]
+    ],
+    "betti": [
+      {
+        "i": 0,
+        "j": 0,
+        "beta": 1
+      },
+      {
+        "i": 1,
+        "j": 2,
+        "beta": 6
+      },
+      {
+        "i": 2,
+        "j": 3,
+        "beta": 8
+      },
+      {
+        "i": 3,
+        "j": 4,
+        "beta": 3
+      }
+    ],
+    "claims": {
+      "res.complex": [
+        "checked",
+        "checked"
+      ],
+      "res.image": [
+        "checked",
+        "checked"
+      ],
+      "res.input_homogeneous": [
+        "checked",
+        "checked"
+      ],
+      "res.differentials_homogeneous": [
+        "checked",
+        "checked"
+      ],
+      "res.exact": [
+        "asserted",
+        "asserted"
+      ],
+      "res.entries_in_maximal_ideal": [
+        "checked",
+        "checked"
+      ],
+      "res.minimal": [
+        "checked",
+        "asserted"
+      ],
+      "res.betti": [
+        "checked",
+        "asserted"
+      ]
+    },
+    "not_claimed": []
+  }
+}

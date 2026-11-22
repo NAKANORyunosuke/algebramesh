@@ -1,0 +1,165 @@
+{
+  "name": "module_resolution_twisted_cubic",
+  "note": "R/I for the twisted cubic: R <- R(-2)^3 <- R(-3)^2, beta_{0,0} = 1, beta_{1,2} = 3, beta_{2,3} = 2",
+  "kind": "module",
+  "operation": "complex.free_resolution",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z",
+          "w"
+        ],
+        "order": "grevlex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                2,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                1,
+                1,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                0,
+                1,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                0,
+                2,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "certificate": "include"
+  },
+  "expect": {
+    "degrees": [
+      [
+        0
+      ],
+      [
+        2,
+        2,
+        2
+      ],
+      [
+        3,
+        3
+      ]
+    ],
+    "betti": [
+      {
+        "i": 0,
+        "j": 0,
+        "beta": 1
+      },
+      {
+        "i": 1,
+        "j": 2,
+        "beta": 3
+      },
+      {
+        "i": 2,
+        "j": 3,
+        "beta": 2
+      }
+    ],
+    "claims": {
+      "res.complex": [
+        "checked",
+        "checked"
+      ],
+      "res.image": [
+        "checked",
+        "checked"
+      ],
+      "res.input_homogeneous": [
+        "checked",
+        "checked"
+      ],
+      "res.differentials_homogeneous": [
+        "checked",
+        "checked"
+      ],
+      "res.exact": [
+        "asserted",
+        "asserted"
+      ],
+      "res.entries_in_maximal_ideal": [
+        "checked",
+        "checked"
+      ],
+      "res.minimal": [
+        "checked",
+        "asserted"
+      ],
+      "res.betti": [
+        "checked",
+        "asserted"
+      ]
+    },
+    "not_claimed": []
+  }
+}

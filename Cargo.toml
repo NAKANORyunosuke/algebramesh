@@ -1,0 +1,63 @@
+[workspace]
+resolver = "3"
+members = ["crates/*", "bindings/python"]
+
+[workspace.package]
+version = "1.1.0"
+edition = "2024"
+rust-version = "1.89"
+repository = "https://github.com/NAKANORyunosuke/algebramesh"
+license = "MIT"
+description = "Rust-based distributed computer algebra and research computing platform."
+publish = false
+
+[workspace.dependencies]
+algebramesh-openxm-protocol = { path = "crates/algebramesh-openxm-protocol" }
+algebramesh-openxm-client = { path = "crates/algebramesh-openxm-client" }
+algebramesh-math-types = { path = "crates/algebramesh-math-types" }
+algebramesh-ops = { path = "crates/algebramesh-ops" }
+algebramesh-verify = { path = "crates/algebramesh-verify" }
+algebramesh-core = { path = "crates/algebramesh-core" }
+algebramesh-backend-asir = { path = "crates/algebramesh-backend-asir" }
+algebramesh-backend-macaulay2 = { path = "crates/algebramesh-backend-macaulay2" }
+algebramesh-backend-oscar = { path = "crates/algebramesh-backend-oscar" }
+algebramesh-gkz = { path = "crates/algebramesh-gkz" }
+algebramesh-topology = { path = "crates/algebramesh-topology" }
+algebramesh-rpc = { path = "crates/algebramesh-rpc" }
+algebramesh-client = { path = "crates/algebramesh-client" }
+algebramesh-server = { path = "crates/algebramesh-server" }
+algebramesh-agent = { path = "crates/algebramesh-agent" }
+
+async-trait = "0.1"
+chrono = { version = "0.4", default-features = false, features = ["clock", "serde", "std"] }
+clap = { version = "4", features = ["derive", "env"] }
+hex = "0.4"
+num-bigint = "0.4"
+num-integer = "0.1"
+num-rational = "0.4"
+num-traits = "0.2"
+proptest = "1"
+rusqlite = { version = "0.41", features = ["bundled"] }
+tempfile = "3"
+toml = "1"
+tokio-stream = { version = "0.1", features = ["net"] }
+tonic = { version = "0.14", features = ["tls-ring"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+thiserror = "2"
+tokio = { version = "1", features = ["io-util", "macros", "net", "process", "rt-multi-thread", "sync", "time"] }
+tokio-util = "0.7"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+uuid = { version = "1", features = ["serde", "v4"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+unwrap_used = "warn"
+
+# SHA-256 of blobs in tests and debug builds (ADR 0021).
+[profile.dev.package.sha2]
+opt-level = 3

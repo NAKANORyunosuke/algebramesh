@@ -1,0 +1,94 @@
+{
+  "name": "gkz_indicial_rank_jump",
+  "kind": "gkz_indicial",
+  "note": "A=[[1,1,1,1],[0,1,3,4]], beta=[1,2], weight (1,2,0,3): the toric ring of A is not Cohen-Macaulay, and at beta=(1,2) the rank is 5, one more than vol(A)=4",
+  "category": "rank_jump",
+  "reference": {
+    "holonomic_rank": 5,
+    "sources": [
+      "Singular 4.2.1, holonomicRank of dmodloc.lib (tests/regression/references/holonomic_rank.sing)",
+      "B. Sturmfels and N. Takayama, Groebner bases and hypergeometric functions, in Groebner Bases and Applications (1998): the rank of this A jumps to 5 at beta=(1,2)",
+      "vol(A), computed by run.py (4, the rank at every other beta)"
+    ]
+  },
+  "arguments": {
+    "A": [
+      [
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        3,
+        4
+      ]
+    ],
+    "beta": [
+      "1",
+      "2"
+    ],
+    "weight": [
+      1,
+      2,
+      0,
+      3
+    ]
+  },
+  "expect": {
+    "holonomic_rank": 5,
+    "resonant": true,
+    "exponents": [
+      {
+        "point": [
+          "-1",
+          "2",
+          "0",
+          "0"
+        ],
+        "multiplicity": 1
+      },
+      {
+        "point": [
+          "1/3",
+          "0",
+          "2/3",
+          "0"
+        ],
+        "multiplicity": 1
+      },
+      {
+        "point": [
+          "-1/3",
+          "1",
+          "1/3",
+          "0"
+        ],
+        "multiplicity": 1
+      },
+      {
+        "point": [
+          "0",
+          "1",
+          "-1",
+          "1"
+        ],
+        "multiplicity": 1
+      },
+      {
+        "point": [
+          "0",
+          "0",
+          "2",
+          "-1"
+        ],
+        "multiplicity": 1
+      }
+    ]
+  },
+  "backends": [
+    "macaulay2"
+  ]
+}

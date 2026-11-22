@@ -1,0 +1,29 @@
+{
+  "name": "matrix_snf_beyond_64_bits",
+  "note": "entries 2^64 .. 2^67: the gcd is 2^64 and det = 2^129, so diag(2^64, 2^65)",
+  "kind": "matrix",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "operation": "matrix.smith_normal_form",
+  "arguments": {
+    "domain": "ZZ",
+    "matrix": [
+      [
+        "18446744073709551616",
+        "36893488147419103232"
+      ],
+      [
+        "55340232221128654848",
+        "147573952589676412928"
+      ]
+    ]
+  },
+  "expect": {
+    "diagonal": [
+      "18446744073709551616",
+      "36893488147419103232"
+    ]
+  }
+}

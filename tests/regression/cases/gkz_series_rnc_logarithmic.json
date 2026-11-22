@@ -1,0 +1,80 @@
+{
+  "name": "gkz_series_rnc_logarithmic",
+  "kind": "gkz_series",
+  "note": "beta=0: the exponent 0 has multiplicity 2; the second solution is log(x1 x3/x2^2) + 2t + 3t^2 + 20/3 t^3 + ... with t = x1 x3/x2^2",
+  "category": "resonant",
+  "reference": {
+    "holonomic_rank": 2,
+    "sources": [
+      "Singular 4.2.1, holonomicRank of dmodloc.lib (tests/regression/references/holonomic_rank.sing)",
+      "vol(A), computed by run.py"
+    ]
+  },
+  "arguments": {
+    "A": [
+      [
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        2
+      ]
+    ],
+    "beta": [
+      "0",
+      "0"
+    ],
+    "weight": [
+      1,
+      0,
+      1
+    ],
+    "order": 6
+  },
+  "expect": {
+    "holonomic_rank": 2,
+    "resonant": true,
+    "exponents": [
+      {
+        "point": [
+          "0",
+          "0",
+          "0"
+        ],
+        "multiplicity": 2,
+        "status": "logarithmic",
+        "solutions": [
+          {
+            "status": "verified_to_order",
+            "direction": null,
+            "coefficients": [
+              "1"
+            ]
+          },
+          {
+            "status": "verified_to_order",
+            "direction": [
+              1,
+              -2,
+              1
+            ],
+            "coefficients": [
+              "1",
+              "-2",
+              "1",
+              "2",
+              "3",
+              "20/3"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "backends": [
+    "macaulay2"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "matrix_rank_3x4",
+  "note": "row 3 = row 1 + row 2",
+  "kind": "matrix",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "operation": "matrix.rank",
+  "arguments": {
+    "domain": "QQ",
+    "matrix": [
+      [
+        "2",
+        "4",
+        "6",
+        "8"
+      ],
+      [
+        "1",
+        "3",
+        "5",
+        "7"
+      ],
+      [
+        "3",
+        "7",
+        "11",
+        "15"
+      ]
+    ]
+  },
+  "expect": {
+    "rank": 2
+  }
+}

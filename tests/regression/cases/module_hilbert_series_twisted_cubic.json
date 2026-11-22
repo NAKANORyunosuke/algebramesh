@@ -1,0 +1,128 @@
+{
+  "name": "module_hilbert_series_twisted_cubic",
+  "note": "(1 + 2t) / (1 - t)^2, which agrees with the Betti numbers: (1 + 2t)(1 - t)^2 = 1 - 3t^2 + 2t^3",
+  "kind": "module",
+  "operation": "ideal.hilbert_series",
+  "backends": [
+    "macaulay2",
+    "oscar"
+  ],
+  "arguments": {
+    "ideal": {
+      "type": "ideal",
+      "ring": {
+        "domain": "QQ",
+        "variables": [
+          "x",
+          "y",
+          "z",
+          "w"
+        ],
+        "order": "grevlex"
+      },
+      "generators": [
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                2,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                1,
+                0,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                1,
+                1,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "type": "polynomial",
+          "terms": [
+            {
+              "coefficient": "1",
+              "exponents": [
+                0,
+                1,
+                0,
+                1
+              ]
+            },
+            {
+              "coefficient": "-1",
+              "exponents": [
+                0,
+                0,
+                2,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "betti_table": true
+  },
+  "expect": {
+    "numerator": [
+      "1",
+      "2"
+    ],
+    "denominator_exponent": 2,
+    "betti": [
+      {
+        "i": 0,
+        "j": 0,
+        "beta": 1
+      },
+      {
+        "i": 1,
+        "j": 2,
+        "beta": 3
+      },
+      {
+        "i": 2,
+        "j": 3,
+        "beta": 2
+      }
+    ],
+    "claims": {
+      "hilbert.series": [
+        "asserted",
+        "asserted"
+      ]
+    },
+    "not_claimed": []
+  }
+}

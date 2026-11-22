@@ -1,0 +1,7 @@
+# One version for development and CI, so that a new stable release does not
+# fail CI on its new lints. The images do not read this file; the version is
+# also written in .github/workflows/ci.yml, deploy/docker/algebramesh.Dockerfile
+# and tests/integration/run-disk-full.sh, to change together.
+[toolchain]
+channel = "1.95.0"
+components = ["rustfmt", "clippy"]

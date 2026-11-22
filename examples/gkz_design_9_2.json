@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "backend": "macaulay2",
+  "operation": "gkz.generate",
+  "arguments": {
+    "A": [
+      [
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        2
+      ]
+    ],
+    "beta": [
+      "3",
+      "4"
+    ],
+    "expected": [
+      [
+        {
+          "coefficient": "1",
+          "x_exponents": [
+            0,
+            0,
+            0
+          ],
+          "d_exponents": [
+            1,
+            0,
+            1
+          ]
+        },
+        {
+          "coefficient": "-1",
+          "x_exponents": [
+            0,
+            0,
+            0
+          ],
+          "d_exponents": [
+            0,
+            2,
+            0
+          ]
+        }
+      ],
+      [
+        {
+          "coefficient": "1",
+          "x_exponents": [
+            1,
+            0,
+            0
+          ],
+          "d_exponents": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "coefficient": "1",
+          "x_exponents": [
+            0,
+            1,
+            0
+          ],
+          "d_exponents": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "coefficient": "1",
+          "x_exponents": [
+            0,
+            0,
+            1
+          ],
+          "d_exponents": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "coefficient": "-3",
+          "x_exponents": [
+            0,
+            0,
+            0
+          ],
+          "d_exponents": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      [
+        {
+          "coefficient": "1",
+          "x_exponents": [
+            0,
+            1,
+            0
+          ],
+          "d_exponents": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "coefficient": "2",
+          "x_exponents": [
+            0,
+            0,
+            1
+          ],
+          "d_exponents": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "coefficient": "-4",
+          "x_exponents": [
+            0,
+            0,
+            0
+          ],
+          "d_exponents": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    ]
+  },
+  "limits": {
+    "wall_seconds": 300
+  }
+}

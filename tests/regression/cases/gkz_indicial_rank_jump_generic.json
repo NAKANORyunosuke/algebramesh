@@ -1,0 +1,84 @@
+{
+  "name": "gkz_indicial_rank_jump_generic",
+  "kind": "gkz_indicial",
+  "note": "the A of gkz_indicial_rank_jump with a non-resonant beta=[1/2,1/3], weight (1,2,0,3): the rank is vol(A)=4",
+  "category": "generic",
+  "reference": {
+    "holonomic_rank": 4,
+    "sources": [
+      "Singular 4.2.1, holonomicRank of dmodloc.lib (tests/regression/references/holonomic_rank.sing)",
+      "vol(A), computed by run.py"
+    ]
+  },
+  "arguments": {
+    "A": [
+      [
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        3,
+        4
+      ]
+    ],
+    "beta": [
+      "1/2",
+      "1/3"
+    ],
+    "weight": [
+      1,
+      2,
+      0,
+      3
+    ]
+  },
+  "expect": {
+    "holonomic_rank": 4,
+    "resonant": false,
+    "exponents": [
+      {
+        "point": [
+          "7/18",
+          "0",
+          "1/9",
+          "0"
+        ],
+        "multiplicity": 1
+      },
+      {
+        "point": [
+          "-5/18",
+          "1",
+          "-2/9",
+          "0"
+        ],
+        "multiplicity": 1
+      },
+      {
+        "point": [
+          "-17/18",
+          "2",
+          "-5/9",
+          "0"
+        ],
+        "multiplicity": 1
+      },
+      {
+        "point": [
+          "0",
+          "0",
+          "5/3",
+          "-7/6"
+        ],
+        "multiplicity": 1
+      }
+    ]
+  },
+  "backends": [
+    "macaulay2"
+  ]
+}
